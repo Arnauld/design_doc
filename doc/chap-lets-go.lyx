@@ -50,7 +50,102 @@ Entity: everywhere?
 \end_layout
 
 \begin_layout Standard
-On Request, RequestEvent, User, Group, Template, TemplateGroup
+On Request, RequestEvent, User, Group, Document, DocumentGroup
+\end_layout
+
+\begin_layout Standard
+A request will be a composite of user defined entity (customization), each
+ request can be described by is own descriptor and by the built-in corresponding
+ entity (system).
+\end_layout
+
+\begin_layout Standard
+Request { request_id:uuid, entity_descriptor_id, ...}
+\end_layout
+
+\begin_layout Standard
+Request.systemAttributes = Seq(localeAttribute(this), statusAttribute(this),
+ responsibleAttribute(this))
+\end_layout
+
+\begin_layout Standard
+Request.attributes = join(systemAttributes, entity.attributes)
+\end_layout
+
+\begin_layout Subsubsection
+Example of Entities
+\end_layout
+
+\begin_layout Standard
+Define an entity descriptor named 
+\begin_inset Quotes eld
+\end_inset
+
+address
+\begin_inset Quotes erd
+\end_inset
+
+ with the following attributes:
+\end_layout
+
+\begin_layout Itemize
+address:String
+\end_layout
+
+\begin_layout Itemize
+cmpltAddress:String
+\end_layout
+
+\begin_layout Itemize
+zipCode:String[5]
+\end_layout
+
+\begin_layout Itemize
+city:String
+\end_layout
+
+\begin_layout Standard
+Define an Entity descriptor named 
+\begin_inset Quotes eld
+\end_inset
+
+Company
+\begin_inset Quotes erd
+\end_inset
+
+ with the following attributes:
+\end_layout
+
+\begin_layout Itemize
+name:String
+\end_layout
+
+\begin_layout Itemize
+address:Address
+\end_layout
+
+\begin_layout Standard
+Define an entity named 
+\begin_inset Quotes eld
+\end_inset
+
+Contact
+\begin_inset Quotes erd
+\end_inset
+
+ with the following attributes:
+\end_layout
+
+\begin_layout Itemize
+first_name:String
+\end_layout
+
+\begin_layout Itemize
+last_name:String
+\end_layout
+
+\begin_layout Itemize
+email:String
 \end_layout
 
 \begin_layout Subsection
@@ -62,11 +157,23 @@ Show/hide certain profile fields depending on user role or user permissions
 \end_layout
 
 \begin_layout Standard
-Attribute Window/Sheet: 
+Define attributes and associate them to entity (as Mingle)
+\end_layout
+
+\begin_layout Subsubsection
+Customizing the user/request/entity profile layout
 \end_layout
 
 \begin_layout Standard
-Define attributes and associate them to entity (as Mingle)
+Attribute Window/Sheet per entity+Context
+\end_layout
+
+\begin_layout Subsubsection
+Customizing the user/request/user list layout
+\end_layout
+
+\begin_layout Standard
+Attribute Window/Row per entity list+Context
 \end_layout
 
 \end_body

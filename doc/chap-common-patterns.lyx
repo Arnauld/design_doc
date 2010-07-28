@@ -36,12 +36,13 @@
 \tracking_changes false
 \output_changes false
 \author "" 
+\author "" 
 \end_header
 
 \begin_body
 
 \begin_layout Section
-Common patterns
+Common Patterns and Models
 \end_layout
 
 \begin_layout Standard
@@ -128,7 +129,22 @@ Thus one will have the following diagram:
 \end_layout
 
 \begin_layout Standard
-Readings
+\begin_inset Graphics
+	filename images/EAVdiagram.jpg
+	scale 40
+	clip
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+
+\end_layout
+
+\begin_layout Subsubsection
+Further readings
 \end_layout
 
 \begin_layout Itemize
