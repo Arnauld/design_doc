@@ -1,0 +1,127 @@
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Section
+The Ubiquitous Language
+\end_layout
+
+\begin_layout Standard
+Main Domain Objects
+\end_layout
+
+\begin_layout Subsection
+Actor and User
+\end_layout
+
+\begin_layout Standard
+ES use several concepts to descibe a person: Account, Agent, Customer, External
+ Specialist, Contacts...
+ all those definitions lead to the fact that for each type of person, specific
+ actions are defined, and thus some are not possible without redevelopping
+ a full set of pages, actions and API:
+\end_layout
+
+\begin_layout Standard
+e.g.
+ The ask for help is only available from agent to agent, to add the same
+ functionality to an external specialist new developpement is required.
+ Only a customer can perform a followup on a request, an agent cannot.
+ Customers and Account have custom fields, External Specialists don't have.
+ An account can't be viewed as a customer for other account, and then create
+ a new request by its own, to act as customer a new information sheet must
+ be created.
+\end_layout
+
+\begin_layout Standard
+The idea is to unify all person definition into a unique one that one will
+ call User.
+ 
+\end_layout
+
+\begin_layout Quotation
+A User is anyone (a real person or a bot) that can perform an action by
+ its own.
+\end_layout
+
+\begin_layout Standard
+User can have role for all permission purpose (@see RBAC) and profile to
+ define their settings based on particular context.
+ Role and profile will be detailed further in the document.
+\end_layout
+
+\begin_layout Standard
+For organisational purpose, User can be organized in group to define UserGroup.
+ By doing so, hierachical properties could be inherited and or filtered
+ depending on settings.
+\end_layout
+
+\begin_layout Subsection
+Message, EntryPoint and EndPoint
+\end_layout
+
+\begin_layout Subsection
+Request and its History
+\end_layout
+
+\begin_layout Subsection
+Knowledge Base
+\end_layout
+
+\begin_layout Subsubsection
+Document and DocumentGroup
+\end_layout
+
+\begin_layout Subsection
+Hints
+\end_layout
+
+\begin_layout Subsection
+Resources
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_body
+\end_document
