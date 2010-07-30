@@ -44,5 +44,39 @@
 Namespace
 \end_layout
 
+\begin_layout Paragraph
+Benefits:
+\end_layout
+
+\begin_layout Standard
+A way to help in managing multi-tenancy.
+ Each tenant would belongs to a dedicated namespace.
+\end_layout
+
+\begin_layout Subsection
+Integration
+\end_layout
+
+\begin_layout Subsubsection
+Entities URN
+\end_layout
+
+\begin_layout Standard
+would be changed to: urn:entity/<namespace>:<entity>...
+ e.g.
+\end_layout
+
+\begin_layout Itemize
+ref:entity/Address becomes ref:entity/socgen:Address
+\end_layout
+
+\begin_layout Itemize
+RequestSAVNox would become nox:RequestSAV
+\end_layout
+
+\begin_layout Itemize
+ref:entity/Company/Address/Street
+\end_layout
+
 \end_body
 \end_document
