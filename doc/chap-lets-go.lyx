@@ -5,7 +5,7 @@
 \textclass article
 \use_default_options true
 \language english
-\inputencoding auto
+\inputencoding utf8
 \font_roman default
 \font_sans default
 \font_typewriter default
@@ -17,6 +17,7 @@
 
 \graphics default
 \paperfontsize default
+\spacing single
 \use_hyperref false
 \papersize default
 \use_geometry false
@@ -77,75 +78,7 @@ Example of Entities
 \end_layout
 
 \begin_layout Standard
-Define an entity descriptor named 
-\begin_inset Quotes eld
-\end_inset
 
-address
-\begin_inset Quotes erd
-\end_inset
-
- with the following attributes:
-\end_layout
-
-\begin_layout Itemize
-address:String
-\end_layout
-
-\begin_layout Itemize
-cmpltAddress:String
-\end_layout
-
-\begin_layout Itemize
-zipCode:String[5]
-\end_layout
-
-\begin_layout Itemize
-city:String
-\end_layout
-
-\begin_layout Standard
-Define an Entity descriptor named 
-\begin_inset Quotes eld
-\end_inset
-
-Company
-\begin_inset Quotes erd
-\end_inset
-
- with the following attributes:
-\end_layout
-
-\begin_layout Itemize
-name:String
-\end_layout
-
-\begin_layout Itemize
-address:Address
-\end_layout
-
-\begin_layout Standard
-Define an entity named 
-\begin_inset Quotes eld
-\end_inset
-
-Contact
-\begin_inset Quotes erd
-\end_inset
-
- with the following attributes:
-\end_layout
-
-\begin_layout Itemize
-first_name:String
-\end_layout
-
-\begin_layout Itemize
-last_name:String
-\end_layout
-
-\begin_layout Itemize
-email:String
 \end_layout
 
 \begin_layout Subsection

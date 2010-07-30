@@ -5,7 +5,7 @@
 \textclass article
 \use_default_options true
 \language english
-\inputencoding auto
+\inputencoding utf8
 \font_roman default
 \font_sans default
 \font_typewriter default
@@ -17,6 +17,7 @@
 
 \graphics default
 \paperfontsize default
+\spacing single
 \use_hyperref false
 \papersize default
 \use_geometry false
@@ -107,6 +108,51 @@ target "http://domaindrivendesign.org/books"
 
 \end_layout
 
+\begin_layout Subsection*
+Keywords
+\end_layout
+
+\begin_layout Standard
+Similarly to RFC 2119, the document uses the following keywords to emphasize
+ the current state of the thoughts.
+\end_layout
+
+\begin_layout Itemize
+TODO
+\end_layout
+
+\begin_layout Itemize
+IN-PROGRESS
+\end_layout
+
+\begin_layout Itemize
+ROUGH/AS-IS
+\end_layout
+
+\begin_layout Itemize
+NEEDWORK/INVESTIGATING
+\end_layout
+
+\begin_layout Itemize
+OPTIONAL
+\end_layout
+
+\begin_layout Itemize
+DONE
+\end_layout
+
+\begin_layout Itemize
+IDEA
+\end_layout
+
+\begin_layout Itemize
+MOVETO:<destination>
+\end_layout
+
+\begin_layout Itemize
+PROPOSAL
+\end_layout
+
 \begin_layout Standard
 \begin_inset CommandInset include
 LatexCommand include
@@ -115,9 +161,42 @@ filename "chap-common-patterns.lyx"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
 \begin_inset CommandInset include
 LatexCommand include
 filename "chap-ubiquitous-language.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-entity.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-resources.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
+filename "chap-namespace.lyx"
 
 \end_inset
 

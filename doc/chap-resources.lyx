@@ -43,12 +43,11 @@
 \begin_body
 
 \begin_layout Section
-Common Patterns and Models
+Resources
 \end_layout
 
 \begin_layout Standard
-This section describes common patterns that will be used afterward in the
- document.
+The idea is to separate the resource or large object into a dedicated repository.
 \end_layout
 
 \end_body

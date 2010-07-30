@@ -5,7 +5,7 @@
 \textclass article
 \use_default_options true
 \language english
-\inputencoding utf8
+\inputencoding auto
 \font_roman default
 \font_sans default
 \font_typewriter default
@@ -17,7 +17,6 @@
 
 \graphics default
 \paperfontsize default
-\spacing single
 \use_hyperref false
 \papersize default
 \use_geometry false
@@ -37,18 +36,12 @@
 \tracking_changes false
 \output_changes false
 \author "" 
-\author "" 
 \end_header
 
 \begin_body
 
 \begin_layout Section
-Common Patterns and Models
-\end_layout
-
-\begin_layout Standard
-This section describes common patterns that will be used afterward in the
- document.
+Namespace
 \end_layout
 
 \end_body

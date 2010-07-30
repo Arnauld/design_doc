@@ -1,0 +1,1945 @@
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language english
+\inputencoding utf8
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Section
+Entity
+\end_layout
+
+\begin_layout Subsection
+Entity-Attribute-Value and Type Object
+\end_layout
+
+\begin_layout Standard
+Entity-Attribute-Value is a common pattern that allows dynamic and extensible
+ definition of entity.
+ It allows to design the entities in such a way that attributes (properties
+ or parameters) could be added dynamically without the need to change the
+ database schema.
+\end_layout
+
+\begin_layout Standard
+Basically the roles could be summarized:
+\end_layout
+
+\begin_layout Itemize
+The entity: the item being described.
+ 
+\end_layout
+
+\begin_layout Itemize
+The attribute or parameter or properties: corresponds to the 
+\begin_inset Quotes eld
+\end_inset
+
+custom
+\begin_inset Quotes erd
+\end_inset
+
+ fields in ES.
+ The attribute descriptor would contain the following columns: an attribute
+ ID, attribute name, description, data type, and columns assisting input
+ validation, e.g., maximum string length and regular expression, set of permissibl
+e values, etc.
+ 
+\end_layout
+
+\begin_layout Itemize
+The value of the attribute for an entity.
+\end_layout
+
+\begin_layout Standard
+From TypeObject Pattern:
+\end_layout
+
+\begin_layout Quotation
+Decouple instances from their classes so that those classes can be implemented
+ as instances of a class.
+ Type Object allows new "classes" to be created dynamically at runtime
+\end_layout
+
+\begin_layout Standard
+Similarly new entity descriptor could be created or modified at runtime.
+\end_layout
+
+\begin_layout Standard
+The mapping to OO class is straigthforward: 
+\end_layout
+
+\begin_layout Itemize
+an entity is described by an entity descriptor: an instance is described
+ by its class
+\end_layout
+
+\begin_layout Itemize
+attribute: class's fields
+\end_layout
+
+\begin_layout Itemize
+the attribute value of the entity: the value of the corresponding field
+ instance
+\end_layout
+
+\begin_layout Standard
+Thus one will have the Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "Flo:EAV-Diagram"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Entity-Attribute-Value and descriptors
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "Flo:EAV-Diagram"
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename images/EAVdiagram.jpg
+	width 15cm
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Further readings
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "Wikipedia: EAV"
+target "http://en.wikipedia.org/wiki/Entity-attribute-value_model"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "EAV/CR Data Modelling"
+target "http://ycmi.med.yale.edu/nadkarni/eav_cr_frame.htm"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+The Type Object Pattern - Ralph Johnson and Bobby Woolf
+\end_layout
+
+\begin_layout Subsection
+Attribute Types
+\end_layout
+
+\begin_layout Subsubsection
+Native built-in types
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+String
+\emph default
+: ...
+ an UTF8 character sequence.
+ Database type can change (varchar2, text/clob) depending on the maximum
+ length definition.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+Colonel Jack O'Neil
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+L'Arche de vérité
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\emph on
+Text
+\emph default
+: an UTF8 character sequence (mapped to text/clob)
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Html/Xml
+\emph default
+ : an xml content
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Locale
+\emph default
+: a ...
+ locale
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+LocalizedString
+\emph default
+: list of tuple (
+\emph on
+Locale
+\emph default
+,
+\emph on
+ String
+\emph default
+)
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+LocalizedText
+\emph default
+: 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Identifier
+\emph default
+: special case of 
+\emph on
+String
+\emph default
+ that use only a very limited subset of ANSI characters [a-zA-Z_]+[a-zA-Z0-9_]*
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Integer
+\emph default
+: natural numbers ie -7, 0, 3, 14, 98756
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Double
+\emph default
+: 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Timestamp
+\emph default
+: the number of milliseconds that have passed since January 1, 1970 00:00:00.000
+ GMT.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\emph on
+DateTime
+\emph default
+: 2010/02/03 17:45:17
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+database built-in timestamp
+\end_layout
+
+\begin_layout Itemize
+String in ISO8601 format (yyyy-MM-ddTHH:mm:ss.SSS)
+\end_layout
+
+\begin_layout Itemize
+see org.joda.time.LocalDateTime
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\emph on
+Date
+\emph default
+: 2010/02/03.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Special case of DateTime where Time is not taken into account
+\end_layout
+
+\begin_layout Itemize
+String in ISO8601 format (yyyy-MM-dd)
+\end_layout
+
+\begin_layout Itemize
+see org.joda.time.LocalDate
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\emph on
+Time
+\emph default
+: 17:45:17.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Special case of DateTime where Date is not taken into account
+\end_layout
+
+\begin_layout Itemize
+String in ISO8601 format (HH:mm:ss.SSSZZ)
+\end_layout
+
+\begin_layout Itemize
+see org.joda.time.LocalTime 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Subsubsection
+Advanced types
+\end_layout
+
+\begin_layout Itemize
+Binary
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+raw binary data, can be used as placeholder for api/script...
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Attachment [NEEDWORK]
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+allow file upload
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Reference/URN
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+allow to define reference on high-level object or entities such as user,
+ customer, account, request, message, notification, entity, resource (document,
+ attachment...)
+\end_layout
+
+\begin_layout Itemize
+The reference descriptor should probably be strongly typed, to prevent the
+ usage of different kind of reference on the same entities.
+ The following case should be disallowed :
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Entity(
+\begin_inset Quotes eld
+\end_inset
+
+Company
+\begin_inset Quotes erd
+\end_inset
+
+).get(
+\begin_inset Quotes eld
+\end_inset
+
+Protoss
+\begin_inset Quotes erd
+\end_inset
+
+).responsible = ref:user/3f2504e0
+\end_layout
+
+\begin_layout Itemize
+Entity(
+\begin_inset Quotes eld
+\end_inset
+
+Company
+\begin_inset Quotes erd
+\end_inset
+
+).get(
+\begin_inset Quotes eld
+\end_inset
+
+Zerg
+\begin_inset Quotes erd
+\end_inset
+
+).responsible = ref:group/85b12d34
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Thus type definition would/could require an optional constraints on type:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+ref:user reference to any user
+\end_layout
+
+\begin_layout Itemize
+ref:user[namespace='asgard'] reference to any user that belongs to the 
+\begin_inset Quotes eld
+\end_inset
+
+asgard
+\begin_inset Quotes erd
+\end_inset
+
+ namespace (@see Namespace)
+\end_layout
+
+\begin_layout Itemize
+ref:entity/Address, 
+\end_layout
+
+\begin_layout Itemize
+ref:entity/Company/Address/Street
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Examples:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+ref:user/3f2504e0
+\end_layout
+
+\begin_layout Itemize
+ref:entity/Address
+\end_layout
+
+\begin_layout Itemize
+ref:entity/Company/110e8400-e29b/Address/Street ...
+\end_layout
+
+\begin_layout Itemize
+ref:document/aef8445/text+html
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+Link: support for 'external link', an url is built based on the current
+ context and can be called by clicking on it.
+ This can be seen as the 
+\begin_inset Quotes eld
+\end_inset
+
+ES's Back Link
+\begin_inset Quotes erd
+\end_inset
+
+ feature but at the entity level.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+http://thor:8080/crm/user?id=${customer_id}&open=true
+\end_layout
+
+\begin_layout Itemize
+options:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+(_) open a (new, internal) frame
+\end_layout
+
+\begin_layout Itemize
+(x) return result [select:result type]
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+memoization strategy [select:{never, user_session, application, ttl}]
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+Script: support for 'external field' whose value can be evaluated on-demand
+ using the current entity as context for evaluation.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Script has an uri to locate the script that will be executed, a set of key/value
+ pairs as settings, and a return type.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Return type should be any Attribute type except Script
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+options:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+(_) memoization strategy [select:{never, user_session, application, ttl}]
+\end_layout
+
+\begin_layout Itemize
+(_) @MOVETO{attribute_window} style [select:{link, button}]
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+examples:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+script:js/openCRM.js
+\end_layout
+
+\begin_layout Itemize
+script:groovy/trigger
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Subsection
+Entities Examples
+\end_layout
+
+\begin_layout Standard
+This part describes some entity descriptors, in order to illustrate the
+ definition of entity.
+ When entities will be referred in the document, their definitions are assumed
+ to be those ones.
+\end_layout
+
+\begin_layout Subsubsection
+Address
+\end_layout
+
+\begin_layout Standard
+Define an 
+\emph on
+Entity descriptor
+\emph default
+ named 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+Address
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+ with the following 
+\emph on
+Attribute descriptors
+\emph default
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="3">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Name
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Constraints
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Street
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+String
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Cmplt
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+String
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ZipCode
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+String
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+length<=5
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+City
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+String
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Company
+\end_layout
+
+\begin_layout Standard
+Define an 
+\emph on
+Entity descriptor
+\emph default
+ named 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+Company
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+ with the following 
+\emph on
+Attribute descriptors
+\emph default
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="3" columns="3">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Name
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Constraints
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Name
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+String
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Address
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+entity:Address
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Salutation
+\end_layout
+
+\begin_layout Standard
+Define an 
+\emph on
+Entity descriptor
+\emph default
+ named 
+\begin_inset Quotes eld
+\end_inset
+
+Salutation
+\begin_inset Quotes erd
+\end_inset
+
+ with the following 
+\emph on
+Attribute descriptors
+\emph default
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="3" columns="3">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Name
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Constraints
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Code
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Int
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Label
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+LocalizedString
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Customer 
+\end_layout
+
+\begin_layout Standard
+Define an 
+\emph on
+Entity descriptor
+\emph default
+ named 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+Customer
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+ with the following 
+\emph on
+Attribute descriptors
+\emph default
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="8" columns="3">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Name
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Constraints
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+FirstName
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+String
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+LastName
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+String
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Email
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+String
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+~*[^@]+@[^@]+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Salutation
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+entity:Salutation
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Company
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+entity:Company
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Address
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+entity:Address
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CRMLink
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Link*
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Request
+\end_layout
+
+\begin_layout Paragraph
+RequestStd : Standard Request
+\end_layout
+
+\begin_layout Standard
+Define an 
+\emph on
+Entity descriptor
+\emph default
+ named 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+RequestStd
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+ with the following 
+\emph on
+Attribute descriptors
+\emph default
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="2" columns="3">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Name
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Constraints
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Topic
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+String
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+RequestSAVNox: SAV Request of the Nox Corp.
+\end_layout
+
+\begin_layout Standard
+Define an 
+\emph on
+Entity descriptor
+\emph default
+ named 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+RequestSAVNox
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+ that inherits 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+RequestStd
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+ with the following 
+\emph on
+Attribute descriptors
+\emph default
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="3">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Name
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Constraints
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+MessageRef
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+String
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+InvoiceRef
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+String
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+~[0-9]{8}-[a-zA-Z]{2}-[0-9]{4}
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+TransactionAmount
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Numeric
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+>=0
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ProductRef
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+entity:ProductNox
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph*
+RequestSAVAsgard: SAV Request of the Asgard Corp
+\end_layout
+
+\begin_layout Standard
+Define an 
+\emph on
+Entity descriptor
+\emph default
+ named 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+RequestSAVAsgard
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+ that inherits 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+RequestStd
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+ with the following 
+\emph on
+Attribute descriptors
+\emph default
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="3" columns="3">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Name
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Constraints
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+SGTeam
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+entity:SGTeam
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Emergency
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+script/js:ContactThor
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+RequestESSAsgard: ESS Request of the Asgard Corp
+\end_layout
+
+\begin_layout Standard
+Define an 
+\emph on
+Entity descriptor
+\emph default
+ named 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+RequestESSAsgard
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+ that inherits 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+RequestStd
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+ with the following 
+\emph on
+Attribute descriptors
+\emph default
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="3" columns="3">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Name
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Constraints
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Severity
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Numeric
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+[0-100[
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ProductRef
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+entity:ProductAsgard
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
