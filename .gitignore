@@ -1,5 +1,22 @@
 # use glob syntax.
 syntax: glob
 
+# Ignore all dotfiles...
+.*
+# except for .gitignore
+!.gitignore
+
+# lyx
 *.lyx#
 *.lyx~
+
+# intellij
+*.iws
+*.ipr
+*.iml
+
+# sbt
+target/
+lib_managed/
+src_managed/
+project/boot/

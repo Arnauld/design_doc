@@ -1,0 +1,5 @@
+[Actor]^[User]
+[Actor]^[Group]
+[Group|name]-*[User]
+[Group]<>-sub[Group]
+[User|+firstName;+lastName;+login;+hashedPassword;-salt|+login();+logout()]
