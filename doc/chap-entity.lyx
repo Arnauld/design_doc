@@ -155,8 +155,8 @@ name "Flo:EAV-Diagram"
 
 
 \begin_inset Graphics
-	filename images/EAVdiagram.jpg
-	width 15cm
+	filename diagrams/entity-def.png
+	scale 50
 
 \end_inset
 
@@ -888,6 +888,77 @@ This part describes some entity descriptors, in order to illustrate the
  to be those ones.
 \end_layout
 
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Sample entities class diagram
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename diagrams/entity-samples.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Sample entities request class diagram
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename diagrams/entity-sample-request.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsubsection
 Address
 \end_layout
@@ -920,9 +991,9 @@ Attribute descriptors
 \begin_inset Tabular
 <lyxtabular version="3" rows="5" columns="3">
 <features>
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="7em">
+<column alignment="center" valignment="top" width="6em">
+<column alignment="center" valignment="top" width="14em">
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -1107,9 +1178,9 @@ Attribute descriptors
 \begin_inset Tabular
 <lyxtabular version="3" rows="3" columns="3">
 <features>
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="7em">
+<column alignment="center" valignment="top" width="6em">
+<column alignment="center" valignment="top" width="14em">
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -1182,7 +1253,7 @@ Address
 \begin_inset Text
 
 \begin_layout Plain Layout
-entity:Address
+e:Address
 \end_layout
 
 \end_inset
@@ -1232,9 +1303,9 @@ Attribute descriptors
 \begin_inset Tabular
 <lyxtabular version="3" rows="3" columns="3">
 <features>
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="7em">
+<column alignment="center" valignment="top" width="6em">
+<column alignment="center" valignment="top" width="14em">
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -1307,7 +1378,11 @@ Label
 \begin_inset Text
 
 \begin_layout Plain Layout
-LocalizedString
+Localized-
+\end_layout
+
+\begin_layout Plain Layout
+String
 \end_layout
 
 \end_inset
@@ -1361,9 +1436,9 @@ Attribute descriptors
 \begin_inset Tabular
 <lyxtabular version="3" rows="8" columns="3">
 <features>
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="7em">
+<column alignment="center" valignment="top" width="6em">
+<column alignment="center" valignment="top" width="14em">
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -1494,7 +1569,7 @@ Salutation
 \begin_inset Text
 
 \begin_layout Plain Layout
-entity:Salutation
+e:Salutation
 \end_layout
 
 \end_inset
@@ -1523,7 +1598,7 @@ Company
 \begin_inset Text
 
 \begin_layout Plain Layout
-entity:Company
+e:Company
 \end_layout
 
 \end_inset
@@ -1552,7 +1627,7 @@ Address
 \begin_inset Text
 
 \begin_layout Plain Layout
-entity:Address
+e:Address
 \end_layout
 
 \end_inset
@@ -1639,9 +1714,9 @@ Attribute descriptors
 \begin_inset Tabular
 <lyxtabular version="3" rows="2" columns="3">
 <features>
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="7em">
+<column alignment="center" valignment="top" width="6em">
+<column alignment="center" valignment="top" width="14em">
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -1751,9 +1826,9 @@ Attribute descriptors
 \begin_inset Tabular
 <lyxtabular version="3" rows="5" columns="3">
 <features>
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="7em">
+<column alignment="center" valignment="top" width="6em">
+<column alignment="center" valignment="top" width="14em">
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -1846,7 +1921,7 @@ String
 \begin_inset Text
 
 \begin_layout Plain Layout
-TransactionAmount
+TxAmount
 \end_layout
 
 \end_inset
@@ -1884,7 +1959,7 @@ ProductRef
 \begin_inset Text
 
 \begin_layout Plain Layout
-entity:ProductNox
+e:ProductNox
 \end_layout
 
 \end_inset
@@ -1950,9 +2025,9 @@ Attribute descriptors
 \begin_inset Tabular
 <lyxtabular version="3" rows="3" columns="3">
 <features>
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="7em">
+<column alignment="center" valignment="top" width="6em">
+<column alignment="center" valignment="top" width="14em">
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -1996,7 +2071,7 @@ SGTeam
 \begin_inset Text
 
 \begin_layout Plain Layout
-entity:SGTeam
+e:SGTeam
 \end_layout
 
 \end_inset
@@ -2025,7 +2100,11 @@ Emergency
 \begin_inset Text
 
 \begin_layout Plain Layout
-script/js:ContactThor
+script/js:
+\end_layout
+
+\begin_layout Plain Layout
+ContactThor
 \end_layout
 
 \end_inset
@@ -2091,9 +2170,9 @@ Attribute descriptors
 \begin_inset Tabular
 <lyxtabular version="3" rows="3" columns="3">
 <features>
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="7em">
+<column alignment="center" valignment="top" width="6em">
+<column alignment="center" valignment="top" width="14em">
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -2166,7 +2245,7 @@ ProductRef
 \begin_inset Text
 
 \begin_layout Plain Layout
-entity:ProductAsgard
+e:ProductAsgard
 \end_layout
 
 \end_inset
@@ -2234,9 +2313,9 @@ GenericParameterTable<ID,V>
 \begin_inset Tabular
 <lyxtabular version="3" rows="4" columns="3">
 <features>
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="7em">
+<column alignment="center" valignment="top" width="6em">
+<column alignment="center" valignment="top" width="14em">
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -2368,9 +2447,9 @@ EntityDescriptor:
 \begin_inset Tabular
 <lyxtabular version="3" rows="6" columns="3">
 <features>
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="7em">
+<column alignment="center" valignment="top" width="6em">
+<column alignment="center" valignment="top" width="14em">
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -2566,9 +2645,9 @@ Property Descriptor:
 \begin_inset Tabular
 <lyxtabular version="3" rows="7" columns="3">
 <features>
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="7em">
+<column alignment="center" valignment="top" width="6em">
+<column alignment="center" valignment="top" width="14em">
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -2780,117 +2859,6 @@ bool
 \end_layout
 
 \begin_layout Standard
-PropertyDescriptor-EntityDescriptor: allowing property definition to be
- shared
-\end_layout
-
-\begin_layout Standard
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\noun off
-\color none
-\begin_inset Tabular
-<lyxtabular version="3" rows="3" columns="3">
-<features>
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Name
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Type
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Description
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-entity_descriptor_id
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-FK:int32
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-unique identifier of the entity descriptor
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-property_descriptor_id
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-FK:int32
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-unique identifier of the property descriptor
-\end_layout
-
-\end_inset
-</cell>
-</row>
-</lyxtabular>
-
-\end_inset
-
 
 \end_layout
 

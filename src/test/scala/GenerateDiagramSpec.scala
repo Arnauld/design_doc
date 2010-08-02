@@ -16,8 +16,14 @@ class GenerateDiagramSpec extends JUnitSuite {
   def drawAll:Unit = {
     diagramDefinitionDir.listFiles.foreach { f:File =>
       val fileName = f.getName
-      if(fileName.endsWith(EXTENSION)) {
-        val name = fileName.substring(0, fileName.length-EXTENSION.length)
+      if(fileName.endsWith(sEXTENSION)) {
+	    scruffy = true
+        val name = fileName.substring(0, fileName.length-sEXTENSION.length)
+        call(fileToString(f), name)
+      }
+	  else if(fileName.endsWith(oEXTENSION)) {
+	    scruffy = false
+        val name = fileName.substring(0, fileName.length-oEXTENSION.length)
         call(fileToString(f), name)
       }
     }
@@ -26,10 +32,12 @@ class GenerateDiagramSpec extends JUnitSuite {
 
 object GenerateDiagramSpec {
 
-  val EXTENSION = ".diag"
+  val sEXTENSION = ".diag"
+  val oEXTENSION = ".odiag"
   val DIAG_DIR = "doc/yuml/"
   val OUT_DIR  = "doc/diagrams/"
   val MD5_DIR = ".yuml/"
+  var scruffy = true
 
   def cleanup (diagram:String):String = {
     var clean = diagram.replaceAll("[\r\n]+", ", ")
@@ -43,7 +51,7 @@ object GenerateDiagramSpec {
 
     val md5 = DigestUtils.md5Hex(diagram.getBytes("utf-8"))
 
-    val fileOut = new File(OUT_DIR, name+".jpg")
+    val fileOut = new File(OUT_DIR, name+".png")
     val fileMd5 = new File(MD5_DIR, name)
           
     if(fileOut.exists) {
@@ -67,7 +75,8 @@ object GenerateDiagramSpec {
 
     val encoded = URIUtil.encodeAll(clean, "UTF-8")
     val client = new HttpClient()
-    val method = new GetMethod("http://yuml.me/diagram/scruffy/class/" + encoded)
+	val url = if(scruffy) "http://yuml.me/diagram/scruffy/class/" else "http://yuml.me/diagram/class/"
+    val method = new GetMethod(url + encoded)
 
     val streamOut = new FileOutputStream(fileOut)
     val streamMd5 = new FileOutputStream(fileMd5)
