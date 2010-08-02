@@ -271,6 +271,14 @@ Html/Xml
 \begin_layout Itemize
 
 \emph on
+Password
+\emph default
+: an UTF8 character sequence not displayable and persisted as MD5
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
 Locale
 \emph default
 : a ...
@@ -627,7 +635,14 @@ options:
 
 \begin_deeper
 \begin_layout Itemize
-memoization strategy [select:{never, user_session, application, timeout/ttl}]
+memoization (see
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Memoization"
+
+\end_inset
+
+)
 \end_layout
 
 \end_deeper
@@ -656,9 +671,22 @@ options:
 
 \begin_deeper
 \begin_layout Itemize
-(_) memoization strategy [select:{never, user_session, application, ttl}]
+(x) return result [select:result type]
 \end_layout
 
+\begin_deeper
+\begin_layout Itemize
+(_) memoization (see
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Memoization"
+
+\end_inset
+
+)
+\end_layout
+
+\end_deeper
 \begin_layout Itemize
 (_) [MOVETO:attribute_window] style [select:{link, button}]
 \end_layout
@@ -674,11 +702,181 @@ script:js/openCRM.js
 \end_layout
 
 \begin_layout Itemize
-script:groovy/trigger
+script:groovy/calculateBestTemplate.groovy
 \end_layout
 
 \end_deeper
 \end_deeper
+\begin_layout Standard
+Note: both script and Link could also be attached on attribute window/view
+ directly and not defined at the entity level.
+\end_layout
+
+\begin_layout Subsubsection
+Memoization
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Memoization"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Quote
+Memoization is an optimization technique used primarily to speed up computer
+ programs by having function calls avoid repeating the calculation of results
+ for previously-processed inputs (wikipedia).
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Naïve implementation of Memoization
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+def preferredLocale:Locale = 
+\end_layout
+
+\begin_layout LyX-Code
+  memoizedValue(PREFERRED_LOCALE, calculatePreferredLocale).asInstanceOf[Locale]
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+...
+\end_layout
+
+\begin_layout LyX-Code
+def memoizedValue(key:String, provider:()=>Any):Any => {
+\end_layout
+
+\begin_layout LyX-Code
+  memoizationStrategy match {
+\end_layout
+
+\begin_layout LyX-Code
+    case Never => provider()
+\end_layout
+
+\begin_layout LyX-Code
+    case User  => getOrInit(User.currentUser, key, provider)
+\end_layout
+
+\begin_layout LyX-Code
+    case Appli => getOrInit(Application.currentApplication, key, provider)
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+...
+\end_layout
+
+\begin_layout LyX-Code
+def getOrInit(context:Context, key:String, provider:()=>Any):Any => {
+\end_layout
+
+\begin_layout LyX-Code
+  val valueOpt = context.get(key)
+\end_layout
+
+\begin_layout LyX-Code
+  if(valueOpt.isDefined)
+\end_layout
+
+\begin_layout LyX-Code
+    valueOpt.get
+\end_layout
+
+\begin_layout LyX-Code
+  else {
+\end_layout
+
+\begin_layout LyX-Code
+    val value = provider()
+\end_layout
+
+\begin_layout LyX-Code
+    context.set(key,value)
+\end_layout
+
+\begin_layout LyX-Code
+    value
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph*
+Strategy:
+\end_layout
+
+\begin_layout Itemize
+never: do not perform any memoization
+\end_layout
+
+\begin_layout Itemize
+user_session: function value is cached in the current user session
+\end_layout
+
+\begin_layout Itemize
+application: function value is cached at the application level
+\end_layout
+
+\begin_layout Paragraph
+Options:
+\end_layout
+
+\begin_layout Itemize
+timeout/ttl
+\end_layout
+
 \begin_layout Subsection
 Entities Examples
 \end_layout
@@ -1999,7 +2197,14 @@ EntityView and PropertyView
 \end_layout
 
 \begin_layout Standard
-An entity view is a definition 
+The entity view renders an instance of a specific entity a form suitable
+ for interaction, typically a user interface element.
+ Multiple views can exist for a single definition of entity for different
+ purposes.
+ An entity view defines the set of properties it displays and (if possible)
+ the layout.
+ This will allow an entity to be displayed differently depending on the
+ context, some properties could be hidden for example.
 \end_layout
 
 \begin_layout Subsection

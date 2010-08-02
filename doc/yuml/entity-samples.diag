@@ -1,0 +1,6 @@
+[Address|street:String;cmplt:String;zipCode:String;city:String]
+[Company|name:String]-location 0..1>[Address]
+[Salutation|code:Int;label:LocalizedString]
+[Customer|firstName:String;lastName:String;email:String;crmLink:Link]-1>[Salutation]
+[Customer]-0..1>[Company]
+[Customer]-home 0..1>[Address]
