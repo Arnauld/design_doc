@@ -1,4 +1,4 @@
-#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -202,8 +202,24 @@ The Type Object Pattern - Ralph Johnson and Bobby Woolf
 Attribute Types
 \end_layout
 
+\begin_layout Standard
+We defines three categories of attribute type:
+\end_layout
+
+\begin_layout Itemize
+regular
+\end_layout
+
+\begin_layout Itemize
+reference
+\end_layout
+
+\begin_layout Itemize
+virtual
+\end_layout
+
 \begin_layout Subsubsection
-Native built-in types
+Native built-in types aka Regular
 \end_layout
 
 \begin_layout Itemize
@@ -407,11 +423,6 @@ see org.joda.time.LocalTime
 \end_layout
 
 \end_deeper
-\end_deeper
-\begin_layout Subsubsection
-Advanced types
-\end_layout
-
 \begin_layout Itemize
 Binary
 \end_layout
@@ -422,8 +433,13 @@ raw binary data, can be used as placeholder for api/script...
 \end_layout
 
 \end_deeper
+\end_deeper
+\begin_layout Subsubsection
+Advanced type: Reference and Virtual
+\end_layout
+
 \begin_layout Itemize
-Attachment [NEEDWORK]
+Attachment [NEEDWORK:special case of Reference?]
 \end_layout
 
 \begin_deeper
@@ -1999,7 +2015,17 @@ EntityView and PropertyView
 \end_layout
 
 \begin_layout Standard
-An entity view is a definition 
+Depending on the context it is seen, the entity could be displayed differently.
+ An entity view is a definition of the represention of an entity.
+ For example, for a particular entity definition, one could define a view
+ for the search result display, for the request details display, for a dedicated
+ SSM...
+\end_layout
+
+\begin_layout Standard
+Roughly the rendering of the view corresponds to the html code used to display
+ an entity instance.
+ [IDEA] the view could also be used to filter data through api call.
 \end_layout
 
 \begin_layout Subsection
@@ -2017,12 +2043,12 @@ Storage of all entity descriptors and property descriptor would be done
  no matters the namespace or the tenant.
 \end_layout
 
-\begin_layout Standard
-First the generic template for any parameters table:
+\begin_layout Paragraph*
+GenericParameterTable<ID,V>
 \end_layout
 
 \begin_layout Standard
-GenericParameterTable<ID,V>
+First the generic template for any parameters table:
 \end_layout
 
 \begin_layout Standard
@@ -2155,8 +2181,8 @@ V
 
 \end_layout
 
-\begin_layout Standard
-EntityDescriptor:
+\begin_layout Paragraph
+EntityDescriptor
 \end_layout
 
 \begin_layout Standard
@@ -2326,7 +2352,7 @@ storage
 \begin_inset Text
 
 \begin_layout Plain Layout
-enum[generic,table]
+enum:StorageType
 \end_layout
 
 \end_inset
@@ -2349,12 +2375,42 @@ Indicates if instances of this entity are stored in a dedicated table or
 
 \end_layout
 
-\begin_layout Standard
-EntityDescriptorParameter inherits 
+\begin_layout Paragraph*
+StorageType
+\end_layout
+
+\begin_layout Itemize
+generic (eav)
+\end_layout
+
+\begin_layout Itemize
+key/value-store (xml,json,pbuf,...)
+\end_layout
+
+\begin_layout Itemize
+table mapping: maps the entity to a database table and each property (flatten
+ first nested entity will be handled later) to a dedicated column.
+ One should have the possibility to set also a converter for the column
+ map.
+\end_layout
+
+\begin_layout Itemize
+virtual/external: the entity is not persisted and made of virtual/external
+ attributes only.
+\end_layout
+
+\begin_layout Paragraph*
+EntityDescriptorParameter 
 \end_layout
 
 \begin_layout Standard
-Property Descriptor:
+It inherits GenericParameterTable.
+ Since no search would be performed against their values, the parameter
+ value could be stored in a raw xml or pbuf...
+\end_layout
+
+\begin_layout Paragraph*
+Property Descriptor
 \end_layout
 
 \begin_layout Standard
@@ -2574,9 +2630,22 @@ bool
 
 \end_layout
 
+\begin_layout Paragraph*
+Relationship PropertyDescriptor-EntityDescriptor:
+\end_layout
+
 \begin_layout Standard
-PropertyDescriptor-EntityDescriptor: allowing property definition to be
- shared
+Two possibilities:
+\end_layout
+
+\begin_layout Itemize
+allowing property definition to be shared: thus the relationship is done
+ through a join table
+\end_layout
+
+\begin_layout Itemize
+no sharing of property definition: the propertyDescriptor would have a dedicated
+ column for the entity descriptor it belongs to.
 \end_layout
 
 \begin_layout Standard
@@ -2713,6 +2782,30 @@ join would be a lot more efficient
 Since the number of descriptor would be less than the capacity of an int32
  and the creation of descriptor wouldn't require a very high concurrency
  locking mechanism, thus a sequence would enough.
+\end_layout
+
+\begin_layout Standard
+Entity-AttributeValue
+\end_layout
+
+\begin_layout Itemize
+full eav: one table per data type
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+[RoUGH] first the metadata is read, according to it the SQL is generated
+ by joining on appropriate table based on its type+attribute_descriptor_id+entit
+y_id
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+one table for all value types with dedicated column for main type (see ES...)
+\end_layout
+
+\begin_layout Itemize
+one table key/value where value would be a blob 
 \end_layout
 
 \end_body
