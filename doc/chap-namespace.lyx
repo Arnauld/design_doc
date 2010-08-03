@@ -36,12 +36,28 @@
 \tracking_changes false
 \output_changes false
 \author "" 
+\author "" 
 \end_header
 
 \begin_body
 
 \begin_layout Section
 Namespace
+\end_layout
+
+\begin_layout Standard
+In general, a namespace is a named group of names that are mutually unique.
+ The same name has exactly one meaning within a namespace, but in another
+ namespace it may also occur and may have an other meaning there.
+ Thus 
+\family typewriter
+asgard.User
+\family default
+ and 
+\family typewriter
+nox.User
+\family default
+ refer to two different entity descriptors.
 \end_layout
 
 \begin_layout Paragraph
@@ -53,6 +69,123 @@ A way to help in managing multi-tenancy.
  Each tenant would belongs to a dedicated namespace.
 \end_layout
 
+\begin_layout Standard
+It is best practise to compose only related types within the same namespace
+ and put unrelated types in different namespace(s).
+ Similarly to what you do with Java classes and packages.
+ [NEEDWORK/CHOICE] it is possible to use inheritance of types across namespaces.
+\end_layout
+
+\begin_layout Subsection
+Properties of a namespace
+\end_layout
+
+\begin_layout Standard
+A namespace has the following properties by default:
+\end_layout
+
+\begin_layout Itemize
+a name used as unique and human readable identifier.
+ The namespace name is of type Identifier (i.e.
+ special case of 
+\emph on
+String
+\emph default
+ that use only a very limited subset of ANSI characters [a-zA-Z_]+[a-zA-Z0-9_]*).
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+asgard
+\end_layout
+
+\begin_layout Itemize
+sg_1
+\end_layout
+
+\begin_layout Itemize
+Goa_uld
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+localized labels 
+\end_layout
+
+\begin_layout Itemize
+localized descriptions
+\end_layout
+
+\begin_layout Standard
+A namespace can also be used as a placeholder of properties.
+ Each instance of namespace can be customized, and new properties can be
+ added.
+ Each instance of namespace can be seen as an entity descriptor by itself.
+ This is a common place and context that is shared and available whenever
+ global information must be retrieved.
+ It also enhance the basic concept of key/value pairs by allowing high level
+ object to be used as properties within a namespace scope.
+\end_layout
+
+\begin_layout Standard
+For example, let's define a new namespace named 
+\begin_inset Quotes eld
+\end_inset
+
+Asgard
+\begin_inset Quotes erd
+\end_inset
+
+ with the following properties:
+\end_layout
+
+\begin_layout Itemize
+a property named 
+\begin_inset Quotes eld
+\end_inset
+
+responsible
+\begin_inset Quotes erd
+\end_inset
+
+ of type 
+\family typewriter
+entity/asgard.User
+\family default
+ whose value could be: 
+\family typewriter
+asgard.User(
+\begin_inset Quotes eld
+\end_inset
+
+Thor
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+a property named 
+\begin_inset Quotes eld
+\end_inset
+
+address
+\begin_inset Quotes erd
+\end_inset
+
+ of type 
+\family typewriter
+entity/asgard.Address
+\end_layout
+
+\begin_layout Standard
+Note: since entities or properties may require namespace (e.g.
+ asgard.User and asgard.Address in the previous example), a namespace would
+ be enhance once its corresponding entities and/or properties are created
+ in it.
+\end_layout
+
 \begin_layout Subsection
 Integration
 \end_layout
@@ -62,19 +195,52 @@ Entities URN
 \end_layout
 
 \begin_layout Standard
-would be changed to: urn:entity/<namespace>:<entity>...
+would be changed from 
+\family typewriter
+urn:entity/<entity>
+\family default
+ to 
+\family typewriter
+urn:entity/
+\series bold
+<namespace>:
+\series default
+<entity>
+\family default
+...
  e.g.
 \end_layout
 
 \begin_layout Itemize
-ref:entity/Address becomes ref:entity/socgen:Address
+
+\family typewriter
+ref:entity/Address
+\family default
+ becomes 
+\family typewriter
+ref:entity/
+\series bold
+asgard:
+\series default
+Address
 \end_layout
 
 \begin_layout Itemize
-RequestSAVNox would become nox:RequestSAV
+
+\family typewriter
+RequestSAVNox
+\family default
+ would become
+\family typewriter
+\series bold
+ nox:
+\series default
+RequestSAV
 \end_layout
 
 \begin_layout Itemize
+
+\family typewriter
 ref:entity/Company/Address/Street
 \end_layout
 

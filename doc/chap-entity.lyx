@@ -1,4 +1,4 @@
-#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -71,24 +71,33 @@ Basically the roles could be summarized:
 
 \begin_layout Itemize
 The entity: the item being described.
- 
+ One uses the word "entity" to refer to the structures used to store and
+ manage data.
+ Conceptually, entities are often compared to a table in a database.
+ However, entities include much more than a database table.
+ An entity includes definitions of the forms, views, and behavior of the
+ application related to a specific record type.
+ In addition to the default system entities, the document describes the
+ definition/creation of custom entities.
+ System entities would be: User, Request, Account, Group, Customer, Document...
 \end_layout
 
 \begin_layout Itemize
-The attribute or parameter or properties: corresponds to the 
-\begin_inset Quotes eld
-\end_inset
-
-custom
-\begin_inset Quotes erd
-\end_inset
-
- fields in ES.
+The attribute, parameter, field or property.
+ Each field in an entity form represents an attribute of the entity.
+ You can add custom attributes to system entities to supplement the system
+ attributes that are provided.
+ For most of the system entities, there are more attributes than fields
+ that you see on the form.
  The attribute descriptor would contain the following columns: an attribute
  ID, attribute name, description, data type, and columns assisting input
  validation, e.g., maximum string length and regular expression, set of permissibl
 e values, etc.
- 
+ All entities have some entity relationships with some system entities.
+ For example, the Modified By (modifiedby) and Created By (createdby) attributes
+ are lookup attributes required by the entity relationships to the system
+ User entity.
+ Those are system attributes manage by the application.
 \end_layout
 
 \begin_layout Itemize
@@ -206,7 +215,7 @@ The Type Object Pattern - Ralph Johnson and Bobby Woolf
 \end_layout
 
 \begin_layout Subsection
-Attribute Types
+Attribute Types aka Data Type
 \end_layout
 
 \begin_layout Standard
@@ -288,7 +297,8 @@ Text
 \emph on
 Html/Xml
 \emph default
- : an xml content
+ : an html/xml content.
+ Also to create static HTML-formatted text to be displayed in record views.
 \end_layout
 
 \begin_layout Itemize
@@ -341,7 +351,10 @@ Identifier
 \emph on
 String
 \emph default
- that use only a very limited subset of ANSI characters [a-zA-Z_]+[a-zA-Z0-9_]*
+ that use only a very limited subset of ANSI characters [a-zA-Z_]+[a-zA-Z0-9_]*.
+ This type is mainly used to have a valid but human readable identifier
+ on objects, e.g.
+ Entity's name or Property's name.
 \end_layout
 
 \begin_layout Itemize
@@ -349,9 +362,59 @@ String
 \emph on
 Integer
 \emph default
-: natural numbers ie -7, 0, 3, 14, 98756
+: natural numbers ie -7, 0, 3, 14, 98756.
+ Creates a field to specify positive or negative numbers.
+ You can specify a range with the Min and Max Value fields.
+ 
 \end_layout
 
+\begin_deeper
+\begin_layout Itemize
+The Integer View can be:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+a basic text field allowing only integer number
+\end_layout
+
+\begin_layout Itemize
+a spinner field...
+\end_layout
+
+\begin_layout Itemize
+component that display a predefined set of value: combobox, radiobox
+\end_layout
+
+\begin_layout Itemize
+component that display a predefined set of value and allow multiple selection:
+ checkbox, list...
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+The constraints can be:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+positive/negative
+\end_layout
+
+\begin_layout Itemize
+range
+\end_layout
+
+\begin_layout Itemize
+min, max
+\end_layout
+
+\begin_layout Itemize
+autoincrement
+\end_layout
+
+\end_deeper
+\end_deeper
 \begin_layout Itemize
 
 \emph on
@@ -360,6 +423,28 @@ Double
 : 
 \end_layout
 
+\begin_layout Itemize
+
+\emph on
+Boolean
+\emph default
+: the Boolean View can be 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+combobox
+\end_layout
+
+\begin_layout Itemize
+checkbox
+\end_layout
+
+\begin_layout Itemize
+radioboxes
+\end_layout
+
+\end_deeper
 \begin_layout Itemize
 
 \emph on
@@ -649,9 +734,19 @@ options:
 
 \begin_deeper
 \begin_layout Itemize
-(_) open a (new, internal) frame
+Link view can be: 
 \end_layout
 
+\begin_deeper
+\begin_layout Itemize
+an clickable hyperlink open a (new, dialog/internal) frame
+\end_layout
+
+\begin_layout Itemize
+an iframe
+\end_layout
+
+\end_deeper
 \begin_layout Itemize
 (x) return result [select:result type]
 \end_layout
@@ -901,6 +996,77 @@ timeout/ttl
 \end_layout
 
 \begin_layout Subsection
+Property Descriptor
+\end_layout
+
+\begin_layout Standard
+Depending on the data type that you select, you will need to specify values
+ for some of the fields listed below.
+\end_layout
+
+\begin_layout Itemize
+property name (Identifier)
+\end_layout
+
+\begin_layout Itemize
+label: the label that will be displayed in the User Interface
+\end_layout
+
+\begin_layout Itemize
+description/help text: Enter descriptive text for the field.
+ This text displays when the user points the cursor at the field.
+\end_layout
+
+\begin_layout Itemize
+required in context: [multiselect:{creation_form, update_form, answer_form,
+ ...}]
+\end_layout
+
+\begin_layout Itemize
+hooks:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+onLoad
+\end_layout
+
+\begin_layout Itemize
+onChange
+\end_layout
+
+\begin_layout Itemize
+onSave
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Entity Descriptor
+\end_layout
+
+\begin_layout Itemize
+hooks:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+onLoad
+\end_layout
+
+\begin_layout Itemize
+onChange
+\end_layout
+
+\begin_layout Itemize
+onSave
+\end_layout
+
+\begin_layout Itemize
+onDelete
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
 Entities Examples
 \end_layout
 
@@ -940,40 +1106,6 @@ Sample entities class diagram
 
 \end_inset
 
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Sample entities request class diagram
-\end_layout
-
-\end_inset
-
-
-\begin_inset Graphics
-	filename diagrams/entity-sample-request.png
-	scale 50
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
 
 \end_layout
 
@@ -1705,6 +1837,36 @@ Link*
 Request
 \end_layout
 
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Sample entities request class diagram
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename diagrams/entity-sample-request.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Paragraph
 RequestStd : Standard Request
 \end_layout
@@ -2318,19 +2480,62 @@ facet
 \end_layout
 
 \begin_layout Itemize
-namespace: A name defined on the schema that is then subsequently used to
- prefix identifiers to form the namespace qualified name of a StructuralType.
+
+\emph on
+namespace
+\emph default
+: A name defined on the schema that is then subsequently used to prefix
+ identifiers to form the namespace qualified name of a StructuralType.
  CSDL enforces a maximum length of 512 characters for namespace values.
 \end_layout
 
 \begin_layout Itemize
-namespace qualified name: A QualifiedName that is used to refer to StructuralTyp
-es using the name of the namespace, followed by a period, followed by the
- name of the StructuralType.
+
+\emph on
+namespace qualified name
+\emph default
+: A QualifiedName that is used to refer to StructuralTypes using the name
+ of the namespace, followed by a period, followed by the name of the StructuralT
+ype.
+\end_layout
+
+\begin_layout Subsection
+Constraints
+\end_layout
+
+\begin_layout Standard
+Constraints can be added on both entity and property.
+ It allows to ensure values are valid and match some criteria.
+ It is also a way to hide information based on access control.
+\end_layout
+
+\begin_layout Subsubsection
+Access control
+\end_layout
+
+\begin_layout Standard
+Constraints: 
+\end_layout
+
+\begin_layout Itemize
+require_permission:<permission_name>
+\end_layout
+
+\begin_layout Itemize
+part_of:<group_name>
+\end_layout
+
+\begin_layout Itemize
+part_or_subgroup_of:<group_name>
 \end_layout
 
 \begin_layout Subsection
 Views
+\end_layout
+
+\begin_layout Standard
+Fundamental customization capabilities include selecting the fields to display
+ in the forms and how lists of records are displayed.
 \end_layout
 
 \begin_layout Standard
@@ -2351,10 +2556,34 @@ The entity view renders an instance of a specific entity into a form suitable
 \end_layout
 
 \begin_layout Standard
- This will allow an entity to be displayed differently depending on the
- context, some properties could be hidden for example.Roughly the rendering
- of the view corresponds to the html code used to display an entity instance.
+This will allow an entity to be displayed differently depending on the context,
+ some properties could be hidden for example.Roughly the rendering of the
+ view corresponds to the html code used to display an entity instance.
  [IDEA] the view could also be used to filter data through api call.
+\end_layout
+
+\begin_layout Standard
+Views are a type of predefined query that are available to all users.
+ They are available almost everywhere you see a list of records.
+ You will usually see a drop-down list that displays system views that are
+ available.
+ Each of these views has different filter criteria or presents different
+ columns of data.
+\end_layout
+
+\begin_layout Standard
+You can design how your forms look by selecting different tabs, sections,
+ and fields.
+ The user interface lets you add, remove, and rearrange these elements to
+ design forms that fit the business.
+\end_layout
+
+\begin_layout Standard
+Property options:
+\end_layout
+
+\begin_layout Itemize
+editable/enable/
 \end_layout
 
 \begin_layout Subsection
