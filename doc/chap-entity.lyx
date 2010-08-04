@@ -1,4 +1,4 @@
-#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -271,9 +271,10 @@ entity
 \emph default
  is composed of several 
 \emph on
-properties
+properties.
+
 \emph default
- each 
+ Each 
 \emph on
 property
 \emph default
@@ -282,6 +283,17 @@ property
 property descriptor
 \emph default
 .
+ A 
+\emph on
+property
+\emph default
+ have one or more value whose types match the 
+\emph on
+data type
+\emph default
+ in 
+\emph on
+property descriptor
 \end_layout
 
 \begin_layout Standard
@@ -332,10 +344,23 @@ name "Flo:EAV-Diagram"
 
 \end_layout
 
+\begin_layout Paragraph
+Notes on Namespace
+\end_layout
+
 \begin_layout Standard
-Note: Namespace will have a dedicated section to describe it.
- Briefly a namespace provides a context for the items it holds and thus
- allowing disambiguation of homonym items having the same name (residing
+Namespace will have a dedicated section to describe it.
+ Briefly a namespace provides a context for the items it holds.
+ An item can belong to only one namespace at a given time.
+ 
+\end_layout
+
+\begin_layout Standard
+Namespaces allow to group entities, properties or descriptors under a name
+ or dedicated scope.
+ This way the global scope can be divided in "sub-scopes", each one with
+ its own name.
+ This allows disambiguation of homonym items having the same name (residing
  in different namespaces).
  Namespace could be used for multi-tenant management, more on this later.
  By default, an entity belongs to the same namespace as its descriptor.
@@ -375,6 +400,23 @@ The Type Object Pattern - Ralph Johnson and Bobby Woolf
 Data Types
 \end_layout
 
+\begin_layout Standard
+This subsection describes all the 
+\emph on
+data type
+\emph default
+ that could be supported for 
+\emph on
+property
+\emph default
+.
+ The property descriptor is defined by its name, its data type and zero
+ or more constraints on the value accepted.
+ Since the constraints are mainly dependant on the data type, for each one
+ specific constraints are described.
+ 
+\end_layout
+
 \begin_layout Subsubsection
 String
 \end_layout
@@ -412,6 +454,53 @@ L'Arche de vérité
 Usually a string is displayed in a textfield.
 \end_layout
 
+\begin_layout Paragraph
+Constraints
+\end_layout
+
+\begin_layout Itemize
+empty, not_empty
+\end_layout
+
+\begin_layout Itemize
+length [>, <, ≤, ≥]
+\end_layout
+
+\begin_layout Itemize
+regex [match, not_match, find, not_find]
+\end_layout
+
+\begin_layout Itemize
+mask aka glob [match, not_match]
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+# designate a digits 0-9
+\end_layout
+
+\begin_layout Itemize
+* any numbers of characters (wildcard matching)
+\end_layout
+
+\begin_layout Itemize
+? any character
+\end_layout
+
+\begin_layout Itemize
+e.g.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+##/##/####
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_deeper
 \begin_layout Subsubsection
 Text
 \end_layout
@@ -420,6 +509,16 @@ Text
 ...
  an UTF8 character sequence (mapped to text/clob).
  Usually a text is displayed in a textarea.
+\end_layout
+
+\begin_layout Paragraph
+Constraints
+\end_layout
+
+\begin_layout Standard
+Same as 
+\emph on
+String
 \end_layout
 
 \begin_layout Subsubsection
@@ -433,6 +532,16 @@ Html/Xml
  an html/xml content.
  Also to create static HTML-formatted text to be displayed in record views.
  Usually an html is displayed in an html editor.
+\end_layout
+
+\begin_layout Paragraph
+Constraints
+\end_layout
+
+\begin_layout Standard
+Same as 
+\emph on
+String?
 \end_layout
 
 \begin_layout Subsubsection
@@ -449,6 +558,34 @@ an UTF8 character sequence not displayable and persisted in crypted form.
  Encryption algorithm can be MD5, blowfish...
  Depending on the encryption used, there is no way to retrieve the original
  value.
+\end_layout
+
+\begin_layout Paragraph
+Constraints
+\end_layout
+
+\begin_layout Standard
+Same as 
+\emph on
+String
+\end_layout
+
+\begin_layout Standard
+e.g.
+ : for a password that has at least 5 characters, contains at least one
+ digit and one non-digit.
+\end_layout
+
+\begin_layout Itemize
+length>5
+\end_layout
+
+\begin_layout Itemize
+find([0-9]+)
+\end_layout
+
+\begin_layout Itemize
+find([^0-9]+)
 \end_layout
 
 \begin_layout Subsubsection
@@ -576,6 +713,18 @@ def combinaisons(locale:Locale) = {
 
 \end_layout
 
+\begin_layout Paragraph
+Constraints
+\end_layout
+
+\begin_layout Standard
+Same as 
+\emph on
+String
+\emph default
+ on label part.
+\end_layout
+
 \begin_layout Subsubsection
 
 \emph on
@@ -590,6 +739,18 @@ LocalizedString
  but applied on 
 \emph on
 Text
+\end_layout
+
+\begin_layout Paragraph
+Constraints
+\end_layout
+
+\begin_layout Standard
+Same as 
+\emph on
+String
+\emph default
+ on label part.
 \end_layout
 
 \begin_layout Subsubsection
@@ -609,6 +770,18 @@ String
  Entity's name or Property's name.
 \end_layout
 
+\begin_layout Paragraph
+Constraints
+\end_layout
+
+\begin_layout Standard
+Same as 
+\emph on
+String
+\emph default
+.
+\end_layout
+
 \begin_layout Subsubsection
 
 \emph on
@@ -622,7 +795,7 @@ Integer
 \end_layout
 
 \begin_layout Paragraph*
-The Integer View can be:
+View
 \end_layout
 
 \begin_layout Itemize
@@ -643,19 +816,15 @@ component that display a predefined set of value and allow multiple selection:
 \end_layout
 
 \begin_layout Paragraph*
-The constraints can be:
+Constraints
 \end_layout
 
 \begin_layout Itemize
-positive/negative
+>a, ≥a, <a, ≤a
 \end_layout
 
 \begin_layout Itemize
-range
-\end_layout
-
-\begin_layout Itemize
-min, max
+[a,b], [a,b[, ]a,b], ]a,b[
 \end_layout
 
 \begin_layout Itemize
@@ -668,14 +837,24 @@ autoincrement
 Double
 \end_layout
 
+\begin_layout Paragraph*
+Constraints
+\end_layout
+
+\begin_layout Standard
+Same as 
+\emph on
+Integer
+\end_layout
+
 \begin_layout Subsubsection
 
 \emph on
 Boolean
 \end_layout
 
-\begin_layout Standard
-the Boolean View can be 
+\begin_layout Paragraph*
+View
 \end_layout
 
 \begin_layout Itemize
@@ -688,6 +867,14 @@ checkbox
 
 \begin_layout Itemize
 radioboxes
+\end_layout
+
+\begin_layout Paragraph*
+Constraints
+\end_layout
+
+\begin_layout Standard
+none?
 \end_layout
 
 \begin_layout Subsubsection
@@ -766,10 +953,30 @@ String in ISO8601 format (HH:mm:ss.SSSZZ)
 \end_layout
 
 \begin_layout Itemize
-see org.joda.time.LocalTime 
+see org.joda.time.LocalTime
 \end_layout
 
 \end_deeper
+\begin_layout Paragraph*
+Constraints
+\end_layout
+
+\begin_layout Itemize
+before
+\end_layout
+
+\begin_layout Itemize
+after
+\end_layout
+
+\begin_layout Itemize
+between
+\end_layout
+
+\begin_layout Itemize
+match cron expression?
+\end_layout
+
 \begin_layout Subsubsection
 Binary
 \end_layout
@@ -1284,11 +1491,15 @@ onChange
 \end_layout
 
 \begin_layout Itemize
-onSave
+onSave/onSaveWithVetoable...
 \end_layout
 
 \begin_layout Itemize
 onDelete
+\end_layout
+
+\begin_layout Itemize
+def isValid(entity):ValidationResult
 \end_layout
 
 \end_deeper
@@ -2739,10 +2950,6 @@ Constraints can be added on both entity and property.
 Access control
 \end_layout
 
-\begin_layout Standard
-Constraints: 
-\end_layout
-
 \begin_layout Itemize
 require_permission:<permission_name>
 \end_layout
@@ -2755,43 +2962,18 @@ part_of:<group_name>
 part_or_subgroup_of:<group_name>
 \end_layout
 
-\begin_layout Itemize
-regex for string based data type (string, text, password, localized string/text)
+\begin_layout Subsubsection
+Script/Hook
+\end_layout
+
+\begin_layout Standard
+Script/Hook can be used for complex validation of property value.
+ It allows for example to validate the value of a property based on the
+ values of other properties.
 \end_layout
 
 \begin_layout Itemize
-mask aka glob for string based data type
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-# designate a digits 0-9
-\end_layout
-
-\begin_layout Itemize
-* any numbers of characters (wildcard matching)
-\end_layout
-
-\begin_layout Itemize
-? any character
-\end_layout
-
-\begin_layout Itemize
-e.g.
- 
-\begin_inset Quotes eld
-\end_inset
-
-##/##/####
-\begin_inset Quotes erd
-\end_inset
-
-
-\end_layout
-
-\end_deeper
-\begin_layout Itemize
-positive/negative/range for numbers
+def isValid(property, entity):ValidationResult
 \end_layout
 
 \begin_layout Subsection
