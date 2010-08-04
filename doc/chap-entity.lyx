@@ -1,4 +1,4 @@
-#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -77,31 +77,25 @@ The entity: the item being described.
  However, entities include much more than a database table.
  An entity includes definitions of the forms, views, and behavior of the
  application related to a specific record type.
- In addition to the default system entities, the document describes the
- definition/creation of custom entities.
- System entities would be: User, Request, Account, Group, Customer, Document...
+ In addition to the default system entities (User, Request, Account, Group,
+ Customer, Document...), the section describes the definition/creation of custom
+ entities.
+ 
 \end_layout
 
 \begin_layout Itemize
-The attribute, parameter, field or property.
- Each field in an entity form represents an attribute of the entity.
- You can add custom attributes to system entities to supplement the system
- attributes that are provided.
- For most of the system entities, there are more attributes than fields
- that you see on the form.
- The attribute descriptor would contain the following columns: an attribute
- ID, attribute name, description, data type, and columns assisting input
- validation, e.g., maximum string length and regular expression, set of permissibl
-e values, etc.
- All entities have some entity relationships with some system entities.
- For example, the Modified By (modifiedby) and Created By (createdby) attributes
- are lookup attributes required by the entity relationships to the system
- User entity.
- Those are system attributes manage by the application.
+The attribute is also called parameter, field or property.
+ Each attribute in an entity descriptor represents an attribute of the entity.
+ An atttriute is described by an attribute descriptor.
+ The attribute descriptor would contain the following columns: an ID, name,
+ description, data type, and columns assisting input validation, e.g.
+ maximum string length and regular expression, set of permissible values,
+ etc.
+ 
 \end_layout
 
 \begin_layout Itemize
-The value of the attribute for an entity.
+The value of the attribute for an instance of entity.
 \end_layout
 
 \begin_layout Standard
@@ -134,6 +128,20 @@ attribute: class's fields
 \begin_layout Itemize
 the attribute value of the entity: the value of the corresponding field
  instance
+\end_layout
+
+\begin_layout Standard
+Custom attributes can be added to system entities through extension mechanism
+ to supplement the system attributes that are provided.
+ 
+\end_layout
+
+\begin_layout Standard
+All entities have some entity relationships with some system entities.
+ For example, the Modified By (modifiedby) and Created By (createdby) attributes
+ are lookup attributes required by the entity relationships to the system
+ User entity.
+ Those are system attributes manage by the application.
 \end_layout
 
 \begin_layout Standard
@@ -215,41 +223,20 @@ The Type Object Pattern - Ralph Johnson and Bobby Woolf
 \end_layout
 
 \begin_layout Subsection
-Attribute Types aka Data Type
-\end_layout
-
-\begin_layout Standard
-We defines three categories of attribute type:
-\end_layout
-
-\begin_layout Itemize
-regular
-\end_layout
-
-\begin_layout Itemize
-reference
-\end_layout
-
-\begin_layout Itemize
-virtual
+Data Types
 \end_layout
 
 \begin_layout Subsubsection
-Native built-in types aka Regular
+String
 \end_layout
 
-\begin_layout Itemize
-
-\emph on
-String
-\emph default
-: ...
+\begin_layout Standard
+...
  an UTF8 character sequence.
  Database type can change (varchar2, text/clob) depending on the maximum
  length definition.
 \end_layout
 
-\begin_deeper
 \begin_layout Itemize
 \begin_inset Quotes eld
 \end_inset
@@ -272,58 +259,67 @@ L'Arche de vérité
 
 \end_layout
 
-\begin_layout Itemize
-\begin_inset Quotes eld
-\end_inset
-
-
-\begin_inset Quotes erd
-\end_inset
-
-
+\begin_layout Standard
+Usually a string is displayed in a textfield.
 \end_layout
 
-\end_deeper
-\begin_layout Itemize
-
-\emph on
+\begin_layout Subsubsection
 Text
-\emph default
-: an UTF8 character sequence (mapped to text/clob)
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Standard
+...
+ an UTF8 character sequence (mapped to text/clob).
+ Usually a text is displayed in a text area.
+\end_layout
+
+\begin_layout Subsubsection
 
 \emph on
 Html/Xml
-\emph default
- : an html/xml content.
- Also to create static HTML-formatted text to be displayed in record views.
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Standard
+...
+ an html/xml content.
+ Also to create static HTML-formatted text to be displayed in record views.
+ Usually an html is displayed in an html editor.
+\end_layout
+
+\begin_layout Subsubsection
+Encoded/Password
+\end_layout
+
+\begin_layout Standard
 
 \emph on
-Password
+...
+ 
 \emph default
-: an UTF8 character sequence not displayable and persisted as MD5
+an UTF8 character sequence not displayable and persisted in crypted form.
+ Encryption algorithm can be MD5, blowfish...
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Subsubsection
 
 \emph on
 Locale
-\emph default
-: a ...
+\end_layout
+
+\begin_layout Standard
+...
  locale
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Subsubsection
 
 \emph on
 LocalizedString
-\emph default
-: list of tuple (
+\end_layout
+
+\begin_layout Standard
+...
+ set of tuple (
 \emph on
 Locale
 \emph default
@@ -334,20 +330,119 @@ Locale
 )
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Localized string
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+def getString(locale:Locale):Option[String] = {
+\end_layout
+
+\begin_layout LyX-Code
+  val combinaisons = combinaisons(locale)
+\end_layout
+
+\begin_layout LyX-Code
+  findFirst(combinaisons) match {
+\end_layout
+
+\begin_layout LyX-Code
+    case Some(found) => Some(found)
+\end_layout
+
+\begin_layout LyX-Code
+    case _ => findFirst(combinaisons.map { k => fallback(k) })
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+def findFirst(combinaisons:Array[String]) = {
+\end_layout
+
+\begin_layout LyX-Code
+  combinaisons.find { k => containsKey(k) } match {
+\end_layout
+
+\begin_layout LyX-Code
+    case Some(key) => get(key)
+\end_layout
+
+\begin_layout LyX-Code
+    case _ => None
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\begin_layout LyX-Code
+def combinaisons(locale:Locale) = {
+\end_layout
+
+\begin_layout LyX-Code
+  val (lang,country,variant) = split(locale)
+\end_layout
+
+\begin_layout LyX-Code
+  Array(lang+country+variant,lang+country,lang)
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
 
 \emph on
 LocalizedText
-\emph default
-: 
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Standard
+Similar to LocalizedString but applied on Text
+\end_layout
+
+\begin_layout Subsubsection
 
 \emph on
 Identifier
-\emph default
-: special case of 
+\end_layout
+
+\begin_layout Standard
+special case of 
 \emph on
 String
 \emph default
@@ -357,23 +452,22 @@ String
  Entity's name or Property's name.
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Subsubsection
 
 \emph on
 Integer
-\emph default
-: natural numbers ie -7, 0, 3, 14, 98756.
- Creates a field to specify positive or negative numbers.
- You can specify a range with the Min and Max Value fields.
+\end_layout
+
+\begin_layout Standard
+...
+ natural numbers ie -7, 0, 3, 14, 98756.
  
 \end_layout
 
-\begin_deeper
-\begin_layout Itemize
+\begin_layout Paragraph*
 The Integer View can be:
 \end_layout
 
-\begin_deeper
 \begin_layout Itemize
 a basic text field allowing only integer number
 \end_layout
@@ -391,12 +485,10 @@ component that display a predefined set of value and allow multiple selection:
  checkbox, list...
 \end_layout
 
-\end_deeper
-\begin_layout Itemize
+\begin_layout Paragraph*
 The constraints can be:
 \end_layout
 
-\begin_deeper
 \begin_layout Itemize
 positive/negative
 \end_layout
@@ -413,25 +505,22 @@ min, max
 autoincrement
 \end_layout
 
-\end_deeper
-\end_deeper
-\begin_layout Itemize
+\begin_layout Subsubsection
 
 \emph on
 Double
-\emph default
-: 
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Subsubsection
 
 \emph on
 Boolean
-\emph default
-: the Boolean View can be 
 \end_layout
 
-\begin_deeper
+\begin_layout Standard
+the Boolean View can be 
+\end_layout
+
 \begin_layout Itemize
 combobox
 \end_layout
@@ -444,17 +533,18 @@ checkbox
 radioboxes
 \end_layout
 
-\end_deeper
-\begin_layout Itemize
+\begin_layout Subsubsection
 
 \emph on
 Timestamp
-\emph default
-: the number of milliseconds that have passed since January 1, 1970 00:00:00.000
+\end_layout
+
+\begin_layout Standard
+...
+ the number of milliseconds that have passed since January 1, 1970 00:00:00.000
  GMT.
 \end_layout
 
-\begin_deeper
 \begin_layout Itemize
 
 \emph on
@@ -523,49 +613,41 @@ see org.joda.time.LocalTime
 \end_layout
 
 \end_deeper
-\begin_layout Itemize
+\begin_layout Subsubsection
 Binary
 \end_layout
 
-\begin_deeper
-\begin_layout Itemize
-raw binary data, can be used as placeholder for api/script...
+\begin_layout Standard
+...
+ raw binary data, can be used as placeholder for api/script...
 \end_layout
 
-\end_deeper
-\end_deeper
 \begin_layout Subsubsection
-Advanced type: Reference and Virtual
-\end_layout
-
-\begin_layout Itemize
 Attachment [NEEDWORK:special case of Reference?]
 \end_layout
 
-\begin_deeper
-\begin_layout Itemize
-allow file upload
+\begin_layout Standard
+...
+ allow file upload
 \end_layout
 
-\end_deeper
-\begin_layout Itemize
+\begin_layout Subsubsection
 Reference/URN
 \end_layout
 
-\begin_deeper
-\begin_layout Itemize
-allow to define reference on high-level object or entities such as user,
+\begin_layout Standard
+...
+ allow to define reference on high-level object or entities such as user,
  customer, account, request, message, notification, entity, resource (document,
  attachment...)
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Standard
 The reference descriptor should probably be strongly typed, to prevent the
  usage of different kind of reference on the same entities.
  The following case should be disallowed :
 \end_layout
 
-\begin_deeper
 \begin_layout Itemize
 Entity(
 \begin_inset Quotes eld
@@ -606,12 +688,15 @@ Zerg
 ).responsible = ref:group/85b12d34
 \end_layout
 
-\end_deeper
-\begin_layout Itemize
+\begin_layout Standard
+The company Protoss references a User as responnsible whereas the company
+ Zerg references a Group as responsible.
+\end_layout
+
+\begin_layout Standard
 Thus type definition would/could require an optional constraints on type:
 \end_layout
 
-\begin_deeper
 \begin_layout Itemize
 ref:user reference to any user
 \end_layout
@@ -636,7 +721,6 @@ ref:entity/Address,
 ref:entity/Company/Address/Street
 \end_layout
 
-\end_deeper
 \begin_layout Itemize
 Examples:
 \end_layout
@@ -708,10 +792,14 @@ urn:oasis:names:specification:docbook:dtd:xml:4.1.2
 
 \end_deeper
 \end_deeper
-\end_deeper
-\begin_layout Itemize
-Link: support for 'external link', an url is built based on the current
- context and can be called by clicking on it.
+\begin_layout Subsubsection
+Link
+\end_layout
+
+\begin_layout Standard
+...
+ support for 'external link', an url is built based on the current context
+ and can be called by clicking on it.
  This can be seen as the 
 \begin_inset Quotes eld
 \end_inset
@@ -723,7 +811,6 @@ ES's Back Link
  feature but at the entity level.
 \end_layout
 
-\begin_deeper
 \begin_layout Itemize
 http://thor:8080/crm/user?id=${customer_id}&open=true
 \end_layout
@@ -765,24 +852,25 @@ reference "sub:Memoization"
 
 \end_deeper
 \end_deeper
-\end_deeper
-\begin_layout Itemize
-Script: support for 'external field' whose value can be evaluated on-demand
- using the current entity as context for evaluation.
+\begin_layout Subsubsection
+Script
 \end_layout
 
-\begin_deeper
-\begin_layout Itemize
+\begin_layout Standard
+...
+ support for 'external field' whose value can be evaluated on-demand using
+ the current entity as context for evaluation.
+\end_layout
+
+\begin_layout Standard
 Script has an uri to locate the script that will be executed, a set of key/value
  pairs as settings, and a return type.
 \end_layout
 
-\begin_deeper
-\begin_layout Itemize
+\begin_layout Standard
 Return type should be any Attribute type except Script
 \end_layout
 
-\end_deeper
 \begin_layout Itemize
 options:
 \end_layout
@@ -792,7 +880,6 @@ options:
 (x) return result [select:result type]
 \end_layout
 
-\begin_deeper
 \begin_layout Itemize
 (_) memoization (see
 \begin_inset CommandInset ref
@@ -804,7 +891,6 @@ reference "sub:Memoization"
 )
 \end_layout
 
-\end_deeper
 \begin_layout Itemize
 (_) [MOVETO:attribute_window] style [select:{link, button}]
 \end_layout
@@ -823,7 +909,6 @@ script:js/openCRM.js
 script:groovy/calculateBestTemplate.groovy
 \end_layout
 
-\end_deeper
 \end_deeper
 \begin_layout Standard
 Note: both script and Link could also be attached on attribute window/view
@@ -855,10 +940,6 @@ sideways false
 status open
 
 \begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
 \begin_inset Caption
 
 \begin_layout Plain Layout
@@ -871,15 +952,11 @@ Naïve implementation of Memoization
 \end_layout
 
 \begin_layout LyX-Code
-def preferredLocale:Locale = 
+def preferredLocale:Locale = memoizedValue(PREFERRED_LOCALE,
 \end_layout
 
 \begin_layout LyX-Code
-  memoizedValue(PREFERRED_LOCALE, calculatePreferredLocale).asInstanceOf[Locale]
-\end_layout
-
-\begin_layout LyX-Code
-
+    calculatePreferredLocale).asInstanceOf[Locale]
 \end_layout
 
 \begin_layout LyX-Code
@@ -912,10 +989,6 @@ def memoizedValue(key:String, provider:()=>Any):Any => {
 
 \begin_layout LyX-Code
 }
-\end_layout
-
-\begin_layout LyX-Code
-
 \end_layout
 
 \begin_layout LyX-Code
@@ -960,10 +1033,6 @@ def getOrInit(context:Context, key:String, provider:()=>Any):Any => {
 
 \begin_layout LyX-Code
 }
-\end_layout
-
-\begin_layout Plain Layout
-
 \end_layout
 
 \end_inset
@@ -2527,6 +2596,45 @@ part_of:<group_name>
 
 \begin_layout Itemize
 part_or_subgroup_of:<group_name>
+\end_layout
+
+\begin_layout Itemize
+regex for string based data type (string, text, password, localized string/text)
+\end_layout
+
+\begin_layout Itemize
+mask aka glob for string based data type
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+# designate a digits 0-9
+\end_layout
+
+\begin_layout Itemize
+* any numbers of characters (wildcard matching)
+\end_layout
+
+\begin_layout Itemize
+? any character
+\end_layout
+
+\begin_layout Itemize
+e.g.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+##/##/####
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+positive/negative/range for numbers
 \end_layout
 
 \begin_layout Subsection
