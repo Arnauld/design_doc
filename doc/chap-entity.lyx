@@ -1,4 +1,4 @@
-#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -73,43 +73,125 @@ Basically the roles could be summarized:
 The entity: the item being described.
  One uses the word "entity" to refer to the structures used to store and
  manage data.
- Conceptually, entities are often compared to a table in a database.
+ Conceptually, entity is often compared to a table in a database, whereas
+ an instance of entity, a record, would be a row of the table.
  However, entities include much more than a database table.
- An entity includes definitions of the forms, views, and behavior of the
- application related to a specific record type.
- In addition to the default system entities (User, Request, Account, Group,
- Customer, Document...), the section describes the definition/creation of custom
- entities.
- 
+ An entity includes definitions of the properties, views, and behavior of
+ the application related to a specific record type.
+ For example, an entity 
+\begin_inset Quotes eld
+\end_inset
+
+Person
+\begin_inset Quotes erd
+\end_inset
+
+ will have 
+\begin_inset Quotes eld
+\end_inset
+
+FirstName
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+LastName
+\begin_inset Quotes erd
+\end_inset
+
+ as properties, 
+\begin_inset Quotes eld
+\end_inset
+
+Colt Seavers
+\begin_inset Quotes erd
+\end_inset
+
+ would be an instance of a 
+\begin_inset Quotes eld
+\end_inset
+
+Person
+\begin_inset Quotes erd
+\end_inset
+
+.
+ For clarity reason, the definition of an Entity will be called an Entity
+ Descriptor, in other words, an entity is described by an Entity Descriptor.
 \end_layout
 
 \begin_layout Itemize
 The attribute is also called parameter, field or property.
  Each attribute in an entity descriptor represents an attribute of the entity.
- An atttriute is described by an attribute descriptor.
- The attribute descriptor would contain the following columns: an ID, name,
- description, data type, and columns assisting input validation, e.g.
- maximum string length and regular expression, set of permissible values,
- etc.
- 
+ An attribute is described by an Attribute Descriptor.
+ The Attribute Descriptor contains the name of the attribute, its data type,
+ its displayable labels or descriptions, zero or more constraints on the
+ values accepted...
+ For example, the attribute 
+\begin_inset Quotes eld
+\end_inset
+
+FirstName
+\begin_inset Quotes erd
+\end_inset
+
+ is an attribute with data type 
+\begin_inset Quotes eld
+\end_inset
+
+String
+\begin_inset Quotes erd
+\end_inset
+
+ and labels 
+\begin_inset Quotes eld
+\end_inset
+
+First name
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+Prénom
+\begin_inset Quotes erd
+\end_inset
+
+ ...
 \end_layout
 
 \begin_layout Itemize
 The value of the attribute for an instance of entity.
-\end_layout
+ For example, 
+\begin_inset Quotes eld
+\end_inset
 
-\begin_layout Standard
-From TypeObject Pattern:
-\end_layout
+Colt
+\begin_inset Quotes erd
+\end_inset
 
-\begin_layout Quotation
-Decouple instances from their classes so that those classes can be implemented
- as instances of a class.
- Type Object allows new "classes" to be created dynamically at runtime
-\end_layout
+ is the value of the attribute 
+\begin_inset Quotes eld
+\end_inset
 
-\begin_layout Standard
-Similarly new entity descriptor could be created or modified at runtime.
+FirstName
+\begin_inset Quotes erd
+\end_inset
+
+ of the entity 
+\begin_inset Quotes eld
+\end_inset
+
+Colt Seavers
+\begin_inset Quotes erd
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -131,17 +213,75 @@ the attribute value of the entity: the value of the corresponding field
 \end_layout
 
 \begin_layout Standard
-Custom attributes can be added to system entities through extension mechanism
- to supplement the system attributes that are provided.
- 
+From TypeObject Pattern:
+\end_layout
+
+\begin_layout Quotation
+Decouple instances from their classes so that those classes can be implemented
+ as instances of a class.
+ Type Object allows new "classes" to be created dynamically at runtime
 \end_layout
 
 \begin_layout Standard
-All entities have some entity relationships with some system entities.
- For example, the Modified By (modifiedby) and Created By (createdby) attributes
- are lookup attributes required by the entity relationships to the system
- User entity.
- Those are system attributes manage by the application.
+Similarly new entity descriptor could be created or modified at runtime.
+\end_layout
+
+\begin_layout Paragraph*
+The document will use the following terminology:
+\end_layout
+
+\begin_layout Itemize
+An 
+\emph on
+entity
+\emph default
+ is described by an 
+\emph on
+entity descriptor
+\end_layout
+
+\begin_layout Itemize
+A 
+\emph on
+property descriptor
+\emph default
+ describes a 
+\emph on
+property
+\emph default
+: its name, data type, constraints...
+\end_layout
+
+\begin_layout Itemize
+An 
+\emph on
+entity descriptor
+\emph default
+ references several 
+\emph on
+property descriptors
+\emph default
+.
+\end_layout
+
+\begin_layout Itemize
+An 
+\emph on
+entity
+\emph default
+ is composed of several 
+\emph on
+properties
+\emph default
+ each 
+\emph on
+property
+\emph default
+ is described by its corresponding 
+\emph on
+property descriptor
+\emph default
+.
 \end_layout
 
 \begin_layout Standard
@@ -190,6 +330,15 @@ name "Flo:EAV-Diagram"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Note: Namespace will have a dedicated section to describe it.
+ Briefly a namespace provides a context for the items it holds and thus
+ allowing disambiguation of homonym items having the same name (residing
+ in different namespaces).
+ Namespace could be used for multi-tenant management, more on this later.
+ By default, an entity belongs to the same namespace as its descriptor.
 \end_layout
 
 \begin_layout Subsubsection
@@ -270,7 +419,7 @@ Text
 \begin_layout Standard
 ...
  an UTF8 character sequence (mapped to text/clob).
- Usually a text is displayed in a text area.
+ Usually a text is displayed in a textarea.
 \end_layout
 
 \begin_layout Subsubsection
@@ -298,6 +447,8 @@ Encoded/Password
 \emph default
 an UTF8 character sequence not displayable and persisted in crypted form.
  Encryption algorithm can be MD5, blowfish...
+ Depending on the encryption used, there is no way to retrieve the original
+ value.
 \end_layout
 
 \begin_layout Subsubsection
@@ -308,7 +459,7 @@ Locale
 
 \begin_layout Standard
 ...
- locale
+ a locale e.g.: en, en_US, en_GB, en_GB_scottish
 \end_layout
 
 \begin_layout Subsubsection
@@ -432,7 +583,13 @@ LocalizedText
 \end_layout
 
 \begin_layout Standard
-Similar to LocalizedString but applied on Text
+Similar to 
+\emph on
+LocalizedString
+\emph default
+ but applied on 
+\emph on
+Text
 \end_layout
 
 \begin_layout Subsubsection
@@ -911,8 +1068,8 @@ script:groovy/calculateBestTemplate.groovy
 
 \end_deeper
 \begin_layout Standard
-Note: both script and Link could also be attached on attribute window/view
- directly and not defined at the entity level.
+Note: both script and Link could also be attached on entity view directly
+ and not defined at the entity level, more on this in entity view.
 \end_layout
 
 \begin_layout Subsubsection
@@ -1069,8 +1226,8 @@ Property Descriptor
 \end_layout
 
 \begin_layout Standard
-Depending on the data type that you select, you will need to specify values
- for some of the fields listed below.
+A property descriptor, Depending on the data type selected, you will need
+ to specify values for some of the fields listed below.
 \end_layout
 
 \begin_layout Itemize
@@ -3159,134 +3316,6 @@ bool
 \end_layout
 
 \begin_layout Paragraph*
-Relationship PropertyDescriptor-EntityDescriptor:
-\end_layout
-
-\begin_layout Standard
-<<<<<<< HEAD:doc/chap-entity.lyxTwo possibilities:
-\end_layout
-
-\begin_layout Itemize
-allowing property definition to be shared: thus the relationship is done
- through a join table
-\end_layout
-
-\begin_layout Itemize
-no sharing of property definition: the propertyDescriptor would have a dedicated
- column for the entity descriptor it belongs to.
-\end_layout
-
-\begin_layout Standard
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\noun off
-\color none
-\begin_inset Tabular
-<lyxtabular version="3" rows="3" columns="3">
-<features>
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Name
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Type
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Description
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-entity_descriptor_id
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-FK:int32
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-unique identifier of the entity descriptor
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-property_descriptor_id
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-FK:int32
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-unique identifier of the property descriptor
-\end_layout
-
-\end_inset
-</cell>
-</row>
-</lyxtabular>
-
-\end_inset
-
-=======>>>>>>> e0bf342ff507af8d300249e1ccf1aa1dd14c9668:doc/chap-entity.lyx
-\end_layout
-
-\begin_layout Paragraph*
 [REMARKS/CHOICE] why an int32 instead of a uuid for identifier
 \end_layout
 
@@ -3334,6 +3363,10 @@ one table for all value types with dedicated column for main type (see ES...)
 
 \begin_layout Itemize
 one table key/value where value would be a blob 
+\end_layout
+
+\begin_layout Subsection
+Integration
 \end_layout
 
 \end_body

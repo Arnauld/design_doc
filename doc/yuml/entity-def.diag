@@ -3,6 +3,8 @@
 [Entity]<>-*>[Property|index:int;value:«data»]
 [Property]-describedBy 1>[PropertyDescriptor|name:String;multi_value:bool]
 [EntityDescriptor{bg:orange}]-*>[PropertyDescriptor{bg:orange}]
+[EntityDescriptor]->[Namespace]
 [PropertyDescriptor]-1>[DataType|Integer;Double;String;Text;Boolean;Timestamp;Binary;Reference;...]
+[PropertyDescriptor]->[Namespace]
 [EntityDescriptor]-[note: No aggregate for sharing property descriptor among several entity descriptors{bg:cornsilk}]
 [PropertyDescriptor]-[note: No aggregate for sharing property descriptor among several entity descriptors{bg:cornsilk}]

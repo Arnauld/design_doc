@@ -51,13 +51,20 @@ Entity: everywhere?
 \end_layout
 
 \begin_layout Standard
-On Request, RequestEvent, User, Group, Document, DocumentGroup
+On Request, RequestEvent, User, Group, Document, DocumentGroup...
 \end_layout
 
 \begin_layout Standard
-A request will be a composite of user defined entity (customization), each
- request can be described by is own descriptor and by the built-in corresponding
- entity (system).
+Custom attributes can be added to system entities (User, Request, Customer,
+ ) through extension mechanism to supplement the system attributes that
+ are provided.
+ 
+\end_layout
+
+\begin_layout Standard
+A request will be a composite of user defined entity - instance-level customizat
+ion: each request can be described by is own descriptor - and by the built-in
+ corresponding system entity descriptor.
 \end_layout
 
 \begin_layout Standard
@@ -71,6 +78,14 @@ Request.systemAttributes = Seq(localeAttribute(this), statusAttribute(this),
 
 \begin_layout Standard
 Request.attributes = join(systemAttributes, entity.attributes)
+\end_layout
+
+\begin_layout Standard
+All entities have some entity relationships with some system entities.
+ For example, the Modified By (modifiedby) and Created By (createdby) attributes
+ are lookup attributes required by the entity relationships to the system
+ User entity.
+ Those are system attributes manage by the application.
 \end_layout
 
 \begin_layout Subsubsection
