@@ -1,4 +1,4 @@
-#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -412,9 +412,9 @@ property
 .
  The property descriptor is defined by its name, its data type and zero
  or more constraints on the value accepted.
- Since the constraints are mainly dependant on the data type, for each one
- specific constraints are described.
- 
+ Since the constraints are mainly dependant on the data type, for each datatype
+ one describes its specific constraints available.
+ All constraints can be negate, and thus the negate counterpart is not indicated.
 \end_layout
 
 \begin_layout Subsubsection
@@ -450,6 +450,10 @@ L'Arche de vérité
 
 \end_layout
 
+\begin_layout Paragraph*
+View
+\end_layout
+
 \begin_layout Standard
 Usually a string is displayed in a textfield.
 \end_layout
@@ -463,15 +467,52 @@ empty, not_empty
 \end_layout
 
 \begin_layout Itemize
-length [>, <, ≤, ≥]
+length [>, <,<=, >=] 
+\emph on
+a
 \end_layout
 
 \begin_layout Itemize
-regex [match, not_match, find, not_find]
+regex [match, find]
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+CoLOnel
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+matches [a-zA-Z0-9]+
 \end_layout
 
 \begin_layout Itemize
-mask aka glob [match, not_match]
+does not match [A-Z0-9]+
+\end_layout
+
+\begin_layout Itemize
+contains[a-zA-Z0-9]+ and [A-Z0-9]+
+\end_layout
+
+\begin_layout Itemize
+does not contain [0-9]+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+mask aka glob [match, find] a simplified form of regex
 \end_layout
 
 \begin_deeper
@@ -488,18 +529,86 @@ mask aka glob [match, not_match]
 \end_layout
 
 \begin_layout Itemize
-e.g.
- 
 \begin_inset Quotes eld
 \end_inset
 
-##/##/####
+
+\emph on
+a2345:15:aebc4
+\emph default
+
 \begin_inset Quotes erd
 \end_inset
 
 
 \end_layout
 
+\begin_deeper
+\begin_layout Itemize
+matches 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+a####:##:aebc#
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+?????:??:????
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\emph on
+
+\begin_inset Quotes eld
+\end_inset
+
+*:##:*
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+does not match 
+\begin_inset Quotes eld
+\end_inset
+
+:##:
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+contains 
+\begin_inset Quotes eld
+\end_inset
+
+:##:
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_deeper
 \end_deeper
 \begin_layout Subsubsection
 Text
@@ -508,7 +617,15 @@ Text
 \begin_layout Standard
 ...
  an UTF8 character sequence (mapped to text/clob).
- Usually a text is displayed in a textarea.
+ 
+\end_layout
+
+\begin_layout Paragraph*
+View
+\end_layout
+
+\begin_layout Standard
+Usually a text is displayed in a textarea.
 \end_layout
 
 \begin_layout Paragraph
@@ -531,7 +648,16 @@ Html/Xml
 ...
  an html/xml content.
  Also to create static HTML-formatted text to be displayed in record views.
- Usually an html is displayed in an html editor.
+ 
+\end_layout
+
+\begin_layout Paragraph*
+View
+\end_layout
+
+\begin_layout Standard
+Usually an html is displayed in an html editor, a frame/iframe or included
+ directly in the page.
 \end_layout
 
 \begin_layout Paragraph
@@ -560,6 +686,14 @@ an UTF8 character sequence not displayable and persisted in crypted form.
  value.
 \end_layout
 
+\begin_layout Paragraph*
+View
+\end_layout
+
+\begin_layout Standard
+Usually a password is displayed in a password input.
+\end_layout
+
 \begin_layout Paragraph
 Constraints
 \end_layout
@@ -571,9 +705,8 @@ String
 \end_layout
 
 \begin_layout Standard
-e.g.
- : for a password that has at least 5 characters, contains at least one
- digit and one non-digit.
+Typical constraints on password: at least 5 characters, contains at least
+ one digit and one non-digit.
 \end_layout
 
 \begin_layout Itemize
@@ -597,6 +730,14 @@ Locale
 \begin_layout Standard
 ...
  a locale e.g.: en, en_US, en_GB, en_GB_scottish
+\end_layout
+
+\begin_layout Paragraph*
+View
+\end_layout
+
+\begin_layout Standard
+Usually a locale is displayed in a combobox or with small flags
 \end_layout
 
 \begin_layout Subsubsection
@@ -770,6 +911,16 @@ String
  Entity's name or Property's name.
 \end_layout
 
+\begin_layout Paragraph*
+View
+\end_layout
+
+\begin_layout Standard
+Same as 
+\emph on
+Integer
+\end_layout
+
 \begin_layout Paragraph
 Constraints
 \end_layout
@@ -820,11 +971,45 @@ Constraints
 \end_layout
 
 \begin_layout Itemize
->a, ≥a, <a, ≤a
+value [>, >=, <, <=] 
+\emph on
+a
 \end_layout
 
 \begin_layout Itemize
-[a,b], [a,b[, ]a,b], ]a,b[
+in range [
+\emph on
+a
+\emph default
+,
+\emph on
+b
+\emph default
+], [
+\emph on
+a
+\emph default
+,
+\emph on
+b
+\emph default
+[, ]
+\emph on
+a
+\emph default
+,
+\emph on
+b
+\emph default
+], ]
+\emph on
+a
+\emph default
+,
+\emph on
+b
+\emph default
+[
 \end_layout
 
 \begin_layout Itemize
@@ -835,6 +1020,16 @@ autoincrement
 
 \emph on
 Double
+\end_layout
+
+\begin_layout Paragraph*
+View
+\end_layout
+
+\begin_layout Standard
+Same as 
+\emph on
+Integer
 \end_layout
 
 \begin_layout Paragraph*
@@ -958,6 +1153,15 @@ see org.joda.time.LocalTime
 
 \end_deeper
 \begin_layout Paragraph*
+View
+\end_layout
+
+\begin_layout Standard
+Usually a date is displayed using a datepicker, and a time using either
+ mask or string inputs, spinners...
+\end_layout
+
+\begin_layout Paragraph*
 Constraints
 \end_layout
 
@@ -1001,9 +1205,8 @@ Reference/URN
 
 \begin_layout Standard
 ...
- allow to define reference on high-level object or entities such as user,
- customer, account, request, message, notification, entity, resource (document,
- attachment...)
+ allow to define reference on first-level object (user, customer, account,
+ request, message, document, attachment) or user defined entities.
 \end_layout
 
 \begin_layout Standard
@@ -1053,7 +1256,7 @@ Zerg
 \end_layout
 
 \begin_layout Standard
-The company Protoss references a User as responnsible whereas the company
+The company Protoss references a User as responsible whereas the company
  Zerg references a Group as responsible.
 \end_layout
 
@@ -1118,6 +1321,11 @@ ref:entity/Company[@namespace=asgard]/Address/Street.
 \end_layout
 
 \begin_layout Itemize
+ref:entity/asgard.Company/Address/Street.
+ 
+\end_layout
+
+\begin_layout Itemize
 XPath like? urn compatible (RFC 
 \series bold
 3986
@@ -1156,6 +1364,62 @@ urn:oasis:names:specification:docbook:dtd:xml:4.1.2
 
 \end_deeper
 \end_deeper
+\begin_layout Paragraph*
+Constraints
+\end_layout
+
+\begin_layout Itemize
+on referencee type
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+first level: user, customer, account, request, message, document, attachment,
+ ...
+\end_layout
+
+\begin_layout Itemize
+user-defined entities
+\end_layout
+
+\begin_layout Itemize
+e.g.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+type:user, type:customer, ...
+\end_layout
+
+\begin_layout Itemize
+type:entity/asgard.Request
+\end_layout
+
+\begin_layout Itemize
+type:entity/asgard.Request/Address
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+on namespace:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+e.g.
+ belongsToNamespace(
+\begin_inset Quotes eld
+\end_inset
+
+asgard
+\begin_inset Quotes erd
+\end_inset
+
+)|
+\end_layout
+
+\end_deeper
 \begin_layout Subsubsection
 Link
 \end_layout
@@ -1185,20 +1449,6 @@ options:
 
 \begin_deeper
 \begin_layout Itemize
-Link view can be: 
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-an clickable hyperlink open a (new, dialog/internal) frame
-\end_layout
-
-\begin_layout Itemize
-an iframe
-\end_layout
-
-\end_deeper
-\begin_layout Itemize
 (x) return result [select:result type]
 \end_layout
 
@@ -1216,6 +1466,44 @@ reference "sub:Memoization"
 
 \end_deeper
 \end_deeper
+\begin_layout Paragraph*
+View
+\end_layout
+
+\begin_layout Itemize
+an clickable hyperlink that opens a new or dialog/internal frame
+\end_layout
+
+\begin_layout Itemize
+an iframe
+\end_layout
+
+\begin_layout Itemize
+an embedded raw result: 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+such as displaying the html fragment returned
+\end_layout
+
+\begin_layout Itemize
+raw data returned surrounded by html code
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+a view corresponding to the return type specified
+\end_layout
+
+\begin_layout Paragraph*
+Constraints
+\end_layout
+
+\begin_layout Standard
+Any?
+\end_layout
+
 \begin_layout Subsubsection
 Script
 \end_layout
@@ -1277,6 +1565,14 @@ script:groovy/calculateBestTemplate.groovy
 \begin_layout Standard
 Note: both script and Link could also be attached on entity view directly
  and not defined at the entity level, more on this in entity view.
+\end_layout
+
+\begin_layout Paragraph*
+Constraints
+\end_layout
+
+\begin_layout Standard
+Any?
 \end_layout
 
 \begin_layout Subsubsection
@@ -1438,25 +1734,59 @@ A property descriptor, Depending on the data type selected, you will need
 \end_layout
 
 \begin_layout Itemize
-property name (Identifier)
+namespace
 \end_layout
 
 \begin_layout Itemize
-label: the label that will be displayed in the User Interface
+property name: a unique and human readable Identifier
 \end_layout
 
 \begin_layout Itemize
-description/help text: Enter descriptive text for the field.
- This text displays when the user points the cursor at the field.
+labels: the label that will be displayed in the User Interface
 \end_layout
 
 \begin_layout Itemize
-required in context: [multiselect:{creation_form, update_form, answer_form,
- ...}]
+description/help texts: Enter descriptive text for the property.
+ This text displays when the user points the cursor at the property.
 \end_layout
 
 \begin_layout Itemize
-hooks:
+indication if the value in specific context: [multiselect:{all, api, creation_fo
+rm, update_form, answer_form, ...}] is:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+required/mandatory
+\end_layout
+
+\begin_layout Itemize
+editable/updatable
+\end_layout
+
+\begin_layout Itemize
+visible
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+searchable
+\end_layout
+
+\begin_layout Itemize
+indexable
+\end_layout
+
+\begin_layout Itemize
+virtual/persisted/not_persisted
+\end_layout
+
+\begin_layout Itemize
+list of constraints applied on the property
+\end_layout
+
+\begin_layout Itemize
+hooks pluggable on property:
 \end_layout
 
 \begin_deeper
@@ -1478,12 +1808,52 @@ Entity Descriptor
 \end_layout
 
 \begin_layout Itemize
-hooks:
+entity name (Identifier)
+\end_layout
+
+\begin_layout Itemize
+label: the label that will be displayed in the User Interface
+\end_layout
+
+\begin_layout Itemize
+description/help text: Enter descriptive text for the entity.
+ This text displays when the user points the cursor at the entity.
+\end_layout
+
+\begin_layout Itemize
+virtual/persisted/not_persisted
+\end_layout
+
+\begin_layout Itemize
+inherits? from an other entity description
+\end_layout
+
+\begin_layout Itemize
+list of constraints applied on the entity
+\end_layout
+
+\begin_layout Itemize
+list of properties of the entity
 \end_layout
 
 \begin_deeper
 \begin_layout Itemize
-onLoad
+If the entity belongs to a namespace, depending on settings of admin, the
+ list of property available can be filtered
+\end_layout
+
+\begin_layout Itemize
+If the entity is virtual, only virtual properties are available
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+hooks pluggable on entity:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+preLoad/postLost
 \end_layout
 
 \begin_layout Itemize
@@ -1491,11 +1861,11 @@ onChange
 \end_layout
 
 \begin_layout Itemize
-onSave/onSaveWithVetoable...
+preSave/preSaveVetoable, postSave...
 \end_layout
 
 \begin_layout Itemize
-onDelete
+preDelete/preDeleteVetoable, postDelete
 \end_layout
 
 \begin_layout Itemize
@@ -1574,7 +1944,7 @@ Address
 
  with the following 
 \emph on
-Attribute descriptors
+Property descriptors
 \emph default
 :
 \end_layout
@@ -1761,7 +2131,7 @@ Company
 
  with the following 
 \emph on
-Attribute descriptors
+Property descriptors
 \emph default
 :
 \end_layout
@@ -1886,7 +2256,7 @@ Salutation
 
  with the following 
 \emph on
-Attribute descriptors
+Property descriptors
 \emph default
 :
 \end_layout
@@ -2019,7 +2389,7 @@ Customer
 
  with the following 
 \emph on
-Attribute descriptors
+Property descriptors
 \emph default
 :
 \end_layout
@@ -2327,7 +2697,7 @@ RequestStd
 
  with the following 
 \emph on
-Attribute descriptors
+Property descriptors
 \emph default
 :
 \end_layout
@@ -2439,7 +2809,7 @@ RequestStd
 
  with the following 
 \emph on
-Attribute descriptors
+Property descriptors
 \emph default
 :
 \end_layout
@@ -2638,7 +3008,7 @@ RequestStd
 
  with the following 
 \emph on
-Attribute descriptors
+Property descriptors
 \emph default
 :
 \end_layout
@@ -2783,7 +3153,7 @@ RequestStd
 
  with the following 
 \emph on
-Attribute descriptors
+Property descriptors
 \emph default
 :
 \end_layout
@@ -2890,64 +3260,25 @@ e:ProductAsgard
 \end_layout
 
 \begin_layout Subsection
-Glossaire
-\end_layout
-
-\begin_layout Itemize
-
-\emph on
-EntityType
-\emph default
-: This type defines the principal data objects about which information has
- to be managed such as person, places, things or activities relevant to
- the application.
- An entity is an instance of an EntityType.
- It has a unique identity, independent existence, and forms the operational
- unit of consistency.
-\end_layout
-
-\begin_layout Itemize
-
-\emph on
-facet
-\emph default
-: This element provides information that specializes the usage of a type
- – for instance, you can use the precision (that is,.
- accuracy) facet to define the precision of a DateTime property.
-\end_layout
-
-\begin_layout Itemize
-
-\emph on
-namespace
-\emph default
-: A name defined on the schema that is then subsequently used to prefix
- identifiers to form the namespace qualified name of a StructuralType.
- CSDL enforces a maximum length of 512 characters for namespace values.
-\end_layout
-
-\begin_layout Itemize
-
-\emph on
-namespace qualified name
-\emph default
-: A QualifiedName that is used to refer to StructuralTypes using the name
- of the namespace, followed by a period, followed by the name of the StructuralT
-ype.
-\end_layout
-
-\begin_layout Subsection
 Constraints
 \end_layout
 
 \begin_layout Standard
-Constraints can be added on both entity and property.
+Constraints can be added on both entity and property description.
  It allows to ensure values are valid and match some criteria.
- It is also a way to hide information based on access control.
+ Data type specific constraints are described in the corresponding data
+ type section.
+ This section describes generic or common constraints that could be applied
+ on property or entity.
 \end_layout
 
 \begin_layout Subsubsection
 Access control
+\end_layout
+
+\begin_layout Standard
+It provides also a way to hide information based on access control.
+ Can be applied on entity and property.
 \end_layout
 
 \begin_layout Itemize
@@ -2963,17 +3294,170 @@ part_or_subgroup_of:<group_name>
 \end_layout
 
 \begin_layout Subsubsection
-Script/Hook
+Script/Hook Constraints
 \end_layout
 
 \begin_layout Standard
-Script/Hook can be used for complex validation of property value.
- It allows for example to validate the value of a property based on the
- values of other properties.
+Script/Hook can be used for complex validation of property value or entity
+ state.
+\end_layout
+
+\begin_layout Standard
+It allows for example to validate the value of a property based on the values
+ of other properties, and to validate the set of properties even if all
+ single properties are valid.
+\end_layout
+
+\begin_layout Standard
+Such constraints can be applied on a specific property
 \end_layout
 
 \begin_layout Itemize
-def isValid(property, entity):ValidationResult
+def isValid(property, entity):ValidationResult 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+e.g.
+ Maiden's name validation only if the genre property is set to 
+\begin_inset Quotes eld
+\end_inset
+
+woman
+\begin_inset Quotes erd
+\end_inset
+
+ see algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:Maiden's-Name-validation"
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+def isValid(entity):ValidationResult
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Maiden's Name validation
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:Maiden's-Name-validation"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+def isValid(maidenNameProperty, entity) = {
+\end_layout
+
+\begin_layout LyX-Code
+  entity.property(
+\begin_inset Quotes eld
+\end_inset
+
+genre
+\begin_inset Quotes erd
+\end_inset
+
+) match {
+\end_layout
+
+\begin_layout LyX-Code
+    // special validation, only if the value of the property
+\end_layout
+
+\begin_layout LyX-Code
+    // has 
+\begin_inset Quotes eld
+\end_inset
+
+woman
+\begin_inset Quotes erd
+\end_inset
+
+ as name identifier 
+\end_layout
+
+\begin_layout LyX-Code
+    // (see human readable identifier)
+\end_layout
+
+\begin_layout LyX-Code
+    case Name(
+\begin_inset Quotes eld
+\end_inset
+
+woman
+\begin_inset Quotes erd
+\end_inset
+
+) => 
+\end_layout
+
+\begin_layout LyX-Code
+      if(property.notEmpty)
+\end_layout
+
+\begin_layout LyX-Code
+        OkResult
+\end_layout
+
+\begin_layout LyX-Code
+      else
+\end_layout
+
+\begin_layout LyX-Code
+        MissingValueResult
+\end_layout
+
+\begin_layout LyX-Code
+    case _ => OkResult
+\end_layout
+
+\begin_layout LyX-Code
+  }
+\end_layout
+
+\begin_layout LyX-Code
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Predefined values
+\end_layout
+
+\begin_layout Standard
+The authorized value must be one of a selected set of permitted values.
 \end_layout
 
 \begin_layout Subsection
@@ -2981,8 +3465,8 @@ Views
 \end_layout
 
 \begin_layout Standard
-Fundamental customization capabilities include selecting the fields to display
- in the forms and how lists of records are displayed.
+Fundamental customization capabilities include selecting the properties
+ to display when displaying an entity in a list or alone.
 \end_layout
 
 \begin_layout Standard
@@ -3010,16 +3494,29 @@ This will allow an entity to be displayed differently depending on the context,
 \end_layout
 
 \begin_layout Standard
+The framework should provides a basic view for all entity based on their
+ descriptors and their properties descriptors.
+ Such kind of view can be a simple list of property, displaying their label
+ and the most appropriate corresponding editor.
+\end_layout
+
+\begin_layout Standard
+An advanced framework could allow drag and drop to position properties and
+ their labels, based on grid for example.
+\end_layout
+
+\begin_layout Standard
+[NEEDWORK]
+\end_layout
+
+\begin_layout Standard
 Views are a type of predefined query that are available to all users.
  They are available almost everywhere you see a list of records.
  You will usually see a drop-down list that displays system views that are
  available.
  Each of these views has different filter criteria or presents different
  columns of data.
-\end_layout
-
-\begin_layout Standard
-You can design how your forms look by selecting different tabs, sections,
+ You can design how your forms look by selecting different tabs, sections,
  and fields.
  The user interface lets you add, remove, and rearrange these elements to
  design forms that fit the business.
@@ -3093,7 +3590,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-entity_descriptor_id
+descriptor_id
 \end_layout
 
 \end_inset

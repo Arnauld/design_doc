@@ -1,0 +1,5 @@
+[Validator|validate(ValidationContext,beanToValidate)]
+[Validator]^[EntityValidator]
+[Validator]^[PropertyValidator]
+[ValidationContext|report(report)]-*>[ValidationReport|who;messageKey;arguments]
+[ValidationReportLevel|INFO;WARN;ERROR]<1-[ValidationReport]
