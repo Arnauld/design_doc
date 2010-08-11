@@ -25,4 +25,5 @@ class DesignDocProject(info: ProjectInfo) extends DefaultProject(info) {
   val commons_httpclient = "commons-httpclient"     % "commons-httpclient"  % "3.1"   % "compile"
   val junit              = "junit"                  % "junit"               % "4.8.1" % "test"
   val scalatest          = "org.scalatest"          % "scalatest"           % SCALATEST_VERSION % "test"
+  val rhino              = "rhino"                  % "js"                  % 1.7R2   % "compile"
 }

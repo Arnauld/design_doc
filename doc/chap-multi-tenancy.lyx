@@ -1,0 +1,2904 @@
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Section
+Multi-tenant
+\end_layout
+
+\begin_layout Standard
+Wikipedia:
+\end_layout
+
+\begin_layout Quotation
+Multi-tenancy refers to a principle in software architecture where a single
+ instance of the software runs on a server, serving multiple client organization
+s (tenants).
+ Multi-tenancy is contrasted with a multi-instance architecture where separate
+ software instances (or hardware systems) are set up for different client
+ organizations.
+ With a multi-tenant architecture, a software application is designed to
+ virtually partition its data and configuration thus each client organization
+ works with a customized virtual application instance.
+\end_layout
+
+\begin_layout Paragraph
+Requirements
+\end_layout
+
+\begin_layout Itemize
+Customization Multi-tenant applications are typically required to provide
+ a high degree of customization to support each target organization's needs.
+ Customization typically includes the following aspects: 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Branding: allowing each organization to customize the look-and-feel of the
+ application to match their corporate branding (often referred to as a distinct
+ "skin").
+ 
+\end_layout
+
+\begin_layout Itemize
+Workflow: accommodating differences in workflow to be used by a wide range
+ of potential customers.
+ 
+\end_layout
+
+\begin_layout Itemize
+Extensions to the data model: supporting an extensible data model to give
+ customers the ability to customize the data elements managed by the application
+ to meet their specific needs.
+ 
+\end_layout
+
+\begin_layout Itemize
+Access control: letting each client organization independently customize
+ access rights and restrictions for each user.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Quality of service Multitenant applications are expected to provide adequate
+ levels of security and robustness, which are provided by the operating
+ system in the case of multi-instance applications.
+\end_layout
+
+\begin_layout Standard
+Multi-tenancy is a term that is used often in the context of SaaS applications.
+ In general, multi-tenancy refers to the ability to run multiple users of
+ an application on a shared infrastructure.
+ The main motivation for doing this is efficiency, or in other words --
+ reducing the cost per user in comparison to a dedicated system where each
+ user has their own dedicated environment.
+\end_layout
+
+\begin_layout Subsection
+Database design
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+ref [http://discuss.joelonsoftware.com/default.asp?design.4.319460.16]
+\end_layout
+
+\begin_layout Standard
+Multi-tenant database design We are in the process of designing an on-demand
+ business application.
+ We use MS SQL Server for the database.
+\end_layout
+
+\begin_layout Standard
+Here are some of the constraints we've been given: 
+\end_layout
+
+\begin_layout Itemize
+Single database for multiple customers 
+\end_layout
+
+\begin_layout Itemize
+Customers can extend the data model by adding fields and tables (application
+ is meta-data driven)
+\end_layout
+
+\begin_layout Standard
+What would be the best way to solve this?
+\end_layout
+
+\begin_layout Paragraph*
+Have a TenantID field in all tables
+\end_layout
+
+\begin_layout Standard
+The database remains static, i.e.
+ adding a tenant does not change/add tables.
+\end_layout
+
+\begin_layout Standard
+Extending the data model would not really change the physical model, but
+ make use of extension tables.
+ These extension tables contain the extra fields.
+\end_layout
+
+\begin_layout Standard
+Advantages: 
+\end_layout
+
+\begin_layout Itemize
+Static data model 
+\end_layout
+
+\begin_layout Itemize
+App can use DB account with limited rights, always a good thing for security
+\end_layout
+
+\begin_layout Standard
+Disadvantages: 
+\end_layout
+
+\begin_layout Itemize
+Complicated mapping between logical model the customer sees and the physical
+ model, resulting in queries requiring joins to extension tables...
+ 
+\end_layout
+
+\begin_layout Itemize
+Difficult to optimize the database, e.g.
+ adding proper indexes on customer extensions
+\end_layout
+
+\begin_layout Paragraph*
+Have each table exist per tenant
+\end_layout
+
+\begin_layout Standard
+Every table would exist once per tenant, e.g.
+ the Account table would exist as Tenant1ID_Account and Tenant2ID_Account.
+\end_layout
+
+\begin_layout Standard
+Customizations would really alter the data model.
+\end_layout
+
+\begin_layout Standard
+Advantages: 
+\end_layout
+
+\begin_layout Itemize
+Simplifies queries and reduces the complexity of mapping 
+\end_layout
+
+\begin_layout Itemize
+Easier to optimize the database by adding indexes on some of the extensions
+\end_layout
+
+\begin_layout Standard
+Disadvantages: 
+\end_layout
+
+\begin_layout Itemize
+Database account used by the application requires dbo rights, which may
+ be dangerous if somebody finds a security hole letting them do a SQL injection
+ attack 
+\end_layout
+
+\begin_layout Itemize
+Many tables.
+ The application we are designing is a large suite of modules.
+ This can easily add up to 500-1000 tables per tenant.
+ A moderate success would result easily in a hundred tenants.
+ I don't think managing a database with 100,000 tables is realistic
+\end_layout
+
+\begin_layout Standard
+The generic schema that supports unlimited customers and provides extensions
+ and customizations for each customer may be a little more work but it is
+ the only way to do it.
+ I think the reason you haven't found much on Google is because your questions
+ was settled many years ago with the introduction of the relational model.
+\end_layout
+
+\begin_layout Standard
+If you want to have separate objects for each customer, then look at a hierarchi
+el database database such as Cache or IMS, or possibly try a hybrid SQL-Object
+ DB such as Matisse.
+\end_layout
+
+\begin_layout Itemize
+http://www.intersystems.com/ 
+\end_layout
+
+\begin_layout Itemize
+http://www.ibm.com/software/data/ims/ 
+\end_layout
+
+\begin_layout Itemize
+http://www.matisse.com/
+\end_layout
+
+\begin_layout Standard
+We went with the database-per-tennant route at my last job for a number
+ of reasons: 
+\end_layout
+
+\begin_layout Enumerate
+Keeps data separate for security reasons 
+\end_layout
+
+\begin_layout Enumerate
+When you acquire a new tennant, you use your DB creation script and just
+ change the name of the DB files.
+ 
+\end_layout
+
+\begin_layout Enumerate
+When a tennant departs, you just dump their DB and delete the files...
+ done! 
+\end_layout
+
+\begin_layout Enumerate
+Allows you to load-balance across separate DB servers when the business
+ grows.
+ 
+\end_layout
+
+\begin_layout Enumerate
+A DB Server failure doesn't affect all your tennants -- just the ones on
+ that server.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Reduced query complexity -- otherwise every single SELECT / UPDATE / DELETE
+ sql statement needs a "AND TenanntId = @TennantId" where-criteria.
+\end_layout
+
+\begin_layout Standard
+We handled customization by designating certain table columns as "core"
+ -- not subject to customization, and they were in their own table.
+ Tennant custom fields would be in their own table, the structure of which
+ would be described by another core table.
+\end_layout
+
+\begin_layout Subsubsection
+Anne Epstein » The Case for Multiple DBs in Multi Tenancy situations
+\end_layout
+
+\begin_layout Standard
+http://devlicio.us/blogs/anne_epstein/archive/2009/04/24/the-case-for-multiple-db
+s-in-multi-tenancy-situations.aspx
+\end_layout
+
+\begin_layout Standard
+Multitenancy isn't easy, and one of the particularly challenging aspects
+ is what to do with the database.
+ In Ayende's excellent posts on multi tenancy, he's pretty clear that he
+ feels a database per tenant is the way to go .
+ There are two major, reasonable approaches that I know of: First, to have
+ a database per tenant.
+ (This is the approach discussed by Ayende in his multi tenancy series)
+ A second common alternative is to have a tenant id column in all tables
+ that require differentiation by client.
+ My team was in a situation requiring multitenancy, and needed to select
+ an approach.
+ Wary of the idea of multiple databases, the team immediately decided to
+ go with the tenant column approach.
+\end_layout
+
+\begin_layout Standard
+Looking back, I think Ayende was right.
+ The one advantage of the tenantid column system is not having to deal with
+ multiple databases.
+ There are many disadvantages.
+ I'll discuss the advantages, and then give some thoughts on how to deal
+ wwith the complexity of working with multiple databases.
+\end_layout
+
+\begin_layout Standard
+Advantages of multiple databases:
+\end_layout
+
+\begin_layout Standard
+In my mind the most important developer-centric advantage of having multiple
+ databases is the ability to refactor the database.
+ Many times, developers will design a system a system with certain assumptions,
+ then realize those assumptions are wrong.
+ Other times, a major new feature would be much easier and cleaner with
+ certain system changes.
+ If the database is only talking to one system, then when the developer
+ comes upon these situations, s/he can also refactor the database to reflect
+ that understanding, and keep the mapping between database simple, clean
+ and easy to understand.
+ When the code is pushed live, db update scripts also get pushed live.
+ However, if multiple systems (in this case tenants) talk to the same database,
+ this kind of db structure change just can't happen-pushing a db change
+ would alter everyone's db, meaning everyone's code would also have to be
+ updated at once.
+ In many situations, that kind of simultaneous mass upgrade would be totally
+ unacceptable, meaning that once this kind of multitenancy system is put
+ in place, the single db can never again be altered.
+\end_layout
+
+\begin_layout Standard
+Another advantage of multiple databases is the ability to easily load-balance
+ by moving individual tenants to different db servers as necessary.
+ If the databases are architected to be isolated, this isn't a problem-change
+ a few connection strings, and you're done.
+ In a shared system, all tenants suffer if one tenant is overloading the
+ server.
+ 
+\end_layout
+
+\begin_layout Standard
+On a related note, though nobody likes to think about it, clients sometimes
+ leave, and when they do, they will want to be able to take their own data
+ with them.
+ If they have their own database, it's as easy as zipping it up and getting
+ it to them.
+ If all tenants are on the same db, it could be a much more difficult exercise
+ involving picking through every table and selecting out the tenant-specific
+ data.
+ Hopefully you dont give them anything that isn't theirs.
+ Which cleads to the next point.
+\end_layout
+
+\begin_layout Standard
+From a business perspective, data separation is probably the most important
+ reason to go with separate dbs.
+ With a multitenant system, it's impossible for one tenant to end up with
+ anyone else's data.
+ Other tenants' data is in a completely different system, so there's no
+ worry about messing up the tenantid and passing a client someone else's
+ data.
+ Depending on the situation, this could just be embarrassing; in other situation
+s, you might be looking at a lawsuit.
+\end_layout
+
+\begin_layout Standard
+Lastly, having separated databases makes many things in the application
+ more complicated, for the life of the application.
+ Every join, every query, every new table, every mapping has to deal with
+ the tenant id.
+ If the strategy is to use the tenant id to make a composite key on the
+ tables, then you've got that much additional complexity-and if you're using
+ a tool like NHibernate, you'll soon find out that working with composite
+ keys is a LOT less seamless than a single autogenerated key.
+ Eliminate the tenantid, and a whole lot of things become forever simpler,
+ clearer and have a lot less potential for error.
+\end_layout
+
+\begin_layout Standard
+How to deal with multiple databases?
+\end_layout
+
+\begin_layout Standard
+The trouble with multiple databases is that now you have 20 or even 100
+ databases to manage instead of one.
+ Managing this manually would be a difficult, error-prone task that could
+ become overwhelming.
+ In addition, any shared data can become out of sync.
+ The solution? Don't do *anything* manually with these databases.
+ 
+\end_layout
+
+\begin_layout Standard
+For versioning: each time you create a new version of your application,
+ create a db script to update the db from the prior version from the last
+ version to the newest one, and create a script to roll the database back
+ from the newest version to the previous version.
+ There are tools to help produce this kind of script...
+ If you're programming in .Net, Visual Studio Database edition has a tool
+ to help do this for SQL Server, and Red Gate has one as well called SQL
+ Compare.
+ Bundle this script in with the deploy of the code, and push it all out
+ together, to each tenant as they get upgraded.
+ 
+\end_layout
+
+\begin_layout Standard
+For shared data: 99% of the time, shared data is of the sort where it needs
+ to be updated soon, but not necessarily real-time.
+ An example of this is cross-client data for statistical computation.
+ To allow this kind of computation in a multiclient situation, create a
+ process that goes to each system and collects the appropriate data, possibly
+ in varying ways based on the tenant's installed version, then pulls that
+ data into a single system.
+ The combined reporting system can be optimized and tweaked for reporting
+ needs without affecting the designs of the individual tenants.
+ Conversely, if there's any reference data they all need to share (dropdown
+ data, etc) this information can be coordinated with a similar process that
+ does a data push to the different systems, based on application version.
+\end_layout
+
+\begin_layout Standard
+This kind of automation is some up-front work, but once it's done, it's
+ done, and it allows tremendous application flexibility...
+ and once it's set up, it's easy-there's no reason it couldn't become fairly
+ invisible from a management perspective..
+ In addition, it's really a very separate task from the business application
+ itself-it's actually so separate that the syncing application can be written
+ by a completely different team that knows little to nothing about the main
+ application.
+ For that matter, I'm not sure if there's a tool out there that does all
+ of these things already(I bet there is, come to think of it), but there's
+ no reason such a tool couldn't exist.
+\end_layout
+
+\begin_layout Subsubsection
+Multi Tenancy - Approaches and Applicability
+\end_layout
+
+\begin_layout Standard
+http://ayende.com/Blog/archive/2008/08/16/Multi-Tenancy--Approaches-and-Applicabi
+lity.aspx
+\end_layout
+
+\begin_layout Standard
+Yes, I said that the UI post was the last one before I got to the actual
+ implementation details, but I am having a Skype chat now about the subject,
+ and it is important.
+\end_layout
+
+\begin_layout Standard
+The approach that I have outlined so far is focused on building a system
+ that supports variability at all levels, from the database to the UI, through
+ the entities, services and external integration points.
+ The sweet spot for that is if you have a multi tenant application where
+ a tenant want to have high degree of control on the way the application
+ works.
+\end_layout
+
+\begin_layout Standard
+This high degree of control often means that the tenant desires to change
+ specific parts of the applications in ways that make sense to this tenant,
+ but may not make sense to others.
+ A good example would be payroll system.
+ Here, each tenant has their own processes for how to handle this, and they
+ tend to maintain a high degree of control over that.
+\end_layout
+
+\begin_layout Standard
+A good example from the other side would be something like Subtext.
+ Here, we have a multi tenant application that is essentially the same for
+ all the tenants.
+ The behavior of the system is essentially the same for everyone.
+\end_layout
+
+\begin_layout Standard
+That doesn't means that if you need variability in the application, you
+ should immediately jump to the approach that I outline here.
+ If you have a limited number of variability points, and limited number
+ of variability options (that is, you have X amount of strategies that you
+ can configure for each tenant), you might want to consider that approach.
+\end_layout
+
+\begin_layout Standard
+I would probably avoid that anyway, but it is something to take into account.
+ Some people would feel that a few configuration options makes their life
+ easier than a composite, contextual, application.
+\end_layout
+
+\begin_layout Standard
+My rule of the thumb is that if you have both data extensibility and process
+ variability you need to use the composite approach that I have spoken off.
+ Even if you don't have data extensibility, but "merely" lot of variability
+ in the process across the tenants that cannot be standardize, you will
+ want to take the composite approach.
+\end_layout
+
+\begin_layout Subsubsection
+Multi-tenancy part 1: Strategy.
+ 
+\end_layout
+
+\begin_layout Standard
+I want my eCommerce application Suteki Shop to be able to flexibly meet
+ the requirements of any customer (within reason).
+ How can we have a single product but enable our customers to have diverse
+ implementations.
+ I think the solution depends on the level of diversity and the number of
+ customers.
+ The right solution for a product with thousands of customers with little
+ customisation is different from a solution for a handful of customers with
+ very diverse requirements.
+\end_layout
+
+\begin_layout Standard
+There are several axis of change to consider:
+\end_layout
+
+\begin_layout Enumerate
+Codebase.
+ Do I have one codebase, or do I maintain a separate codebase for each customer?
+ 
+\end_layout
+
+\begin_layout Enumerate
+Application instance.
+ Do I have one application instance to service all my customers, or does
+ each customer have a separate one? 
+\end_layout
+
+\begin_layout Enumerate
+Database schemas.
+ Do I have one database schema, or do I have a different schema for each
+ customer? 
+\end_layout
+
+\begin_layout Enumerate
+Database instances.
+ Do I have one database instance or separate ones for each customer? 
+\end_layout
+
+\begin_layout Paragraph
+Lots of customers, little customisation
+\end_layout
+
+\begin_layout Standard
+Lets consider the two extremes.
+ First, say I've got a product that I expect to sell to thousands of customers.
+ My business model is premised on selling a cheap service to very many people.
+ It's worth my while not to allow too much customisation because the effort
+ to supply that simply wouldn't be worth it.
+ If someone wants something significantly different from my thousands of
+ other customers, I'll just tell them to look elsewhere.
+ In this case I'd have a single code base, application instance, database
+ schema and database.
+ Effectively a single application will service all my customers.
+\end_layout
+
+\begin_layout Standard
+In this case the main technical challenge will making sure that each user's
+ data is keyed properly so they perceive it as a single application servicing
+ their needs only.
+ It would be a major failure if one customer could see another's data.
+ Think of an on-line email service such as hotmail.
+ Sometimes we want to allow customers to see each other's data, think Facebook,
+ but that interaction needs to be tightly controlled.
+\end_layout
+
+\begin_layout Standard
+Scope for providing diverging customer requirements is very limited in this
+ case.
+ Effectively every customer gets exactly the same features and all you can
+ do is allow them to maybe switch features off and on.
+ The cost of developing a customisable experience with such a setup is high.
+\end_layout
+
+\begin_layout Standard
+The great thing about this single application approach is its scalability.
+ Each extra customer requires no extra development effort.
+ It's the way billion dollar on-line businesses are made.
+\end_layout
+
+\begin_layout Paragraph
+Few customers, Deep customisation
+\end_layout
+
+\begin_layout Standard
+At the other extreme we might be selling an application to just a handful
+ of clients.
+ Each client has diverse requirements and is willing to spend the money
+ to have them implemented.
+ Do we really have a single application in this case or are we instead deliverin
+g bespoke solutions? Here the answer might be to have a common application
+ library but separate codebases for each client.
+ It would then follow that each client needs separate database schemas,
+ databases and application instances.
+\end_layout
+
+\begin_layout Standard
+In this scheme, the cost of developing divergent features is no greater
+ than developing them for bespoke software.
+ The pain comes in deciding what to code in your shared library and what
+ to code in your bespoke applications.
+ Getting that wrong can mean repeating the same code for each customer and
+ seriously violating the DRY principle.
+\end_layout
+
+\begin_layout Standard
+Because we are effectively building bespoke software, each extra customer
+ requires development effort.
+ As our business grows we have to hire more and more developers to service
+ our customers.
+ The problem is that development teams don't scale well and there are high
+ organisational costs involved.
+ Our profit on each instance of our product is likely to decline rather
+ than rise.
+ For this reason there's a limit to the size a company based on this development
+ model can grow to.
+\end_layout
+
+\begin_layout Paragraph
+So which one is Suteki Shop?
+\end_layout
+
+\begin_layout Standard
+Suteki Shop only has one customer at present.
+ So it's a single bespoke application based on that customer's requirements.
+ In the new year I hope to add a second customer so I'll have to start making
+ decisions about my multi-tenancy strategy.
+ I want to make the right decisions now so that I can provision my third,
+ fourth, tenth or one-hundredth as easily as possible.
+ My customers are likely to have divergent requirements within the constraints
+ of an eCommerce system.
+ The easiest thing for my second customer would be to branch the code, make
+ any changes they want and deploy a second database (with possibly a customised
+ schema) and application instance.
+ But that strategy will not scale to one-hundred customers.
+ Let's make the assumption that I want to service maybe a hundred customers
+ easily, but I'm unlikely to have more than a thousand.
+ Consider the four axis of change above...
+\end_layout
+
+\begin_layout Enumerate
+Codebase.
+ I really don't want to fork my codebase.
+ I'm a firm believer in keeping things DRY.
+ There will be no branching.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Application Instance.
+ This is less clear cut.
+ There are obvious benefits from maintaining separate application instances
+ for each customer and this was my initial intention.
+ I can configure and deploy them as required.
+ However, after looking at techniques for provisioning multiple divergent
+ customers on one instance, I believe that the costs can be minimal.
+ Having one instance is much easier to administer and monitor, so I am changing
+ my mind on this point and will aim for one application instance.
+ One application instance can of course be duplicated to scale over a server
+ farm.
+ I think this approach could scale to thousands of customers.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Database schemas.
+ In the old days, I would have said that having multiple schemas would cause
+ intense scale pain, but that is changing with modern tools.
+ Using an ORM allows us to defer schema creation until deployment.
+ If I can automate the management of schema creation and change, then having
+ multiple versions is less of a problem.
+ Of course that all depends on having multiple databases....
+ 
+\end_layout
+
+\begin_layout Enumerate
+Database instances.
+ If I chose to have one database instance I would have to have one schema
+ which limits the amount of customisation I can do.
+ I would also have to carefully key each customer's data, which is a development
+ overhead.
+ Automating database deployment and maintenance is relatively straightforward
+ so I think the choice here is clear cut.
+ One database per customer.
+ Also this gives me extremely simple database scalability, I can simply
+ farm out my customers to multiple DBMS's.
+ This approach will scale to hundreds of customers, thousands would be problemat
+ic but not impossible.
+ So now I've got my multi-tenancy strategy, how am I going to implement
+ it? The core technology I'm going to use is component oriented software
+ design using Dependency Injection and an IoC Container.
+ 
+\end_layout
+
+\begin_layout Standard
+I'm going to follow some of the recommendations that Oren Eini makes in
+ these posts:
+\end_layout
+
+\begin_layout Itemize
+Multi Tenancy - Approaches and Applicability
+\end_layout
+
+\begin_layout Itemize
+Adaptive Domain Models with Rhino Commons
+\end_layout
+
+\begin_layout Itemize
+Components, Implementations and Contextual Decisions
+\end_layout
+
+\begin_layout Itemize
+Windsor - IHandlerSelector
+\end_layout
+
+\begin_layout Itemize
+Windsor - IModelInterceptersSelector
+\end_layout
+
+\begin_layout Subsubsection
+Problems with multi-tenancy
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+ref.
+ http://sumanchaudhuri.wordpress.com/2008/06/02/problems-with-multi-tenancy/
+\end_layout
+
+\begin_layout Standard
+Let’s play a little word association: What comes to your mind when I say
+ 2008 NBA Eastern Conference Champions? Did you think of the Boston Celtics?
+ 
+\end_layout
+
+\begin_layout Standard
+How about SaaS? Did you say multi-tenant architecture? I don’t blame you.
+\end_layout
+
+\begin_layout Standard
+See, the words multi-tenant have been used so much in discussions around
+ ways of creating a SaaS architecture that SaaS an multi-tenant are almost
+ joined at the hip.
+ But he truth is that not every SaaS solution needs to be multi-tenant.
+ Not every architecture needs to be rewritten to be single instance, multi-tenan
+t.
+ Why? Because multi-tenant comes with it’s own set of challenges and without
+ properly understanding that these challenges are and what alternatives
+ might be better, ISVs might lose time and money just blindly re-architecting
+ their products to conform to a multi-tenant architecture.
+ 
+\end_layout
+
+\begin_layout Standard
+For those of you that are not familiar with multi-tenancy, please visit
+ this post that I have made on that topic.
+ From a perspective of lower costs in terms of infrastructure and maintenance,
+ yes, it is very desirable to move to a multi-tenant architecture.
+ However, doing so raises a slew of problems: 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Potential cost of re-architecture
+\emph default
+ – Let’s face it, no IT service provider, Patni included, has a magic recipe
+ to automatically make your on-premise product in to an on-demand product.
+ So an ISV that is thinking about SaaS has 2 options – either re-build the
+ entire architecture from the ground up or weave in multi-tenancy in to
+ the existing product.
+ Either way, it is going to be costly.
+ And what about new features while the product is being transitioned from
+ on-demand to multi-tenant? 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Security
+\emph default
+ – One of the most often touted concerns from a customer perspective – is
+ my data going to be secure? Often times, a lot of extra design and development
+ needs to happen around the product and database to keep sensitive data
+ safe since the data all resides in the same database in different schemas.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Hosting
+\emph default
+ – Even if an ISV is not hosting their own product, hosting for multi-tenant
+ architectures needs a lot of prep work and that is why not all hosting
+ providers can be a good fit for multi-tenant products.
+ The database configurations, the shared infrastructure and other related
+ issues can make it complicated sometimes to find the right hosting company.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Increased operational and infrastructure costs and people skills
+\emph default
+ – Although not a problem strictly associated with multi-tenancy but more
+ so with SaaS itself, the problem is still worth mentioning.
+ It is not easy to scale up suddenly to managing your own data center, servers,
+ and the hiring of people associated with the SaaS infrastructure.
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Availability
+\emph default
+ – Since you now have a single instance of the product servicing 100s or
+ 1000s of customers, anything that the customer does either accidentally
+ or maliciously could mean downtime for your application (things like an
+ infinite loop, or a security breach or memory leak).
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Limited Customization
+\emph default
+ – Whereas there are ways to provide customization at the data level, workflow
+ level and UI level, the truth is that these options are limited when you
+ pursue a multi-tenant approach.
+ This becomes more of a problem when an ISV has an established customer
+ base who have highly customized their on-premise product and telling them
+ now that the new SaaS product will provide limited amounts of customization
+ or worse still, break if you try to customize it beyond a certain point
+ will just not fly with these customers.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Rigid service levels
+\emph default
+ – SaaS delivers the promise of one customer, but this is a boon and a curse
+ to ISVs at the same time.
+ Larger customers will often not be happy with the one size fits all service
+ levels that most ISVs provide to all their customers and the main reason
+ behind this SLA approach is because the ISVs want to keep customization
+ to a minimum to better control rogue behavior and also because their product
+ now is a single instance serving multiple customers over the Web.
+ Many customers might not be happy with this scenario.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Forced upgrades
+\emph default
+ – SaaS makes it really easy for ISVs to do upgrades.
+ They go from multiple service pack type of upgrades that need to cater
+ to multiple environments to doing infrequent, small upgrades to their product.
+ But this now means that customers are often times not give much of a choice
+ as to which version they want to be on.
+ 
+\end_layout
+
+\begin_layout Standard
+So as you can see, a multi-tenant architecture brings along with it it’s
+ own set of challenges and one needs to think though these issues before
+ deciding if multi-tenancy is the best way to go.
+ When to implement a true multi-tenant architecture depends on various factors.
+ The thing to keep in mind is that multi-tenancy is not the only way to
+ go about architecting a SaaS solution.
+ There are other alternatives to this approach, one of them being virtualization
+ in conjunction with some level of multi-tenancy.
+ Whereas a strict multi-tenant solution might be suitable for SMBs, larger
+ enterprises with more acute needs and desires might not be too happy with
+ a strict multi-tenant solution.
+ This is where using a virtualization product from VMWare to provide for
+ virtualized storage and hardware might be a good compromise.
+\end_layout
+
+\begin_layout Subsubsection
+What are the advantages of using a single database for EACH client?
+\end_layout
+
+\begin_layout Standard
+Assume there's no scaling penalty for storing all the clients in one database;
+ for most people, and well configured databases/queries, this will be fairly
+ true these days.
+ If you're not one of these people, well, then the benefit of a single database
+ is obvious.
+\end_layout
+
+\begin_layout Standard
+In this situation, benefits come from the encapsulation of each client.
+ From the code perspective, each client exists in isolation - there is no
+ possible situation in which a database update might overwrite, corrupt,
+ retrieve or alter data belonging to another client.
+ This also simplifies the model, as you don't need to ever consider the
+ fact that records might belong to another client.
+\end_layout
+
+\begin_layout Standard
+You also get benefits of separability - it's trivial to pull out the data
+ associated with a given client ,and move them to a different server.
+ Or restore a backup of that client when the call up to say "We've deleted
+ some key data!", using the builtin database mechanisms.
+\end_layout
+
+\begin_layout Standard
+You get easy and free server mobility - if you outscale one database server,
+ you can just host new clients on another server.
+ If they were all in one database, you'd need to either get beefier hardware,
+ or run the database over multiple machines.
+\end_layout
+
+\begin_layout Standard
+You get easy versioning - if one client wants to stay on software version
+ 1.0, and another wants 2.0, where 1.0 and 2.0 use different database schemas,
+ there's no problem - you can migrate one without having to pull them out
+ of one database.
+\end_layout
+
+\begin_layout Standard
+I can think of a few dozen more, I guess.
+ But all in all, the key concept is "simplicity".
+ The product manages one client, and thus one database.
+ There is never any complexity from the "But the database also contains
+ other clients" issue.
+ It fits the mental model of the user, where they exist alone.
+ Advantages like being able to doing easy reporting on all clients at once,
+ are minimal - how often do you want a report on the whole world, rather
+ than just one client?
+\end_layout
+
+\begin_layout Subsection
+Physical structure of the data store
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+ref.
+ [ayende08-PhysicalDataModel]
+\end_layout
+
+\begin_layout Standard
+In general, there are two basic options:
+\end_layout
+
+\begin_layout Itemize
+The TenantId column and separated data stores.
+ The TenantId is simply adding a column to all the columns, showing what
+ tenant the row belongs to.
+ 
+\end_layout
+
+\begin_layout Itemize
+The separate data store calls for a much higher level of separation, where
+ there is no shared storage for the tenants.
+\end_layout
+
+\begin_layout Standard
+There are variation on those, such as having separation in the schema level
+ instead of DB level, etc, but they all end up being down to one of those
+ choices.
+\end_layout
+
+\begin_layout Standard
+The TenantId approach allows you to use a single DB for the entire application,
+ potentially reducing costs for managing the environment.
+ It is also the easiest to explain, we just filter by TenantId and that
+ is it!
+\end_layout
+
+\begin_layout Standard
+It comes with a whole set of problems that is related to that decision,
+ however:
+\end_layout
+
+\begin_layout Itemize
+Isolation - You have to actively do filtering all the time.
+ This has major issues on your code.
+ And now, tacking TenantId = @CurrentTenant at each query is not going to
+ be sufficient.
+ Consider the case of joins in such an environment, you are likely to get
+ a filter only on the end result, after it was joined already.
+ And that is just one example.
+ 
+\end_layout
+
+\begin_layout Itemize
+Backup - The backup strategy that you have for this scenario sucks.
+ Basically, you have to roll your own.
+ 
+\end_layout
+
+\begin_layout Itemize
+Customer copy of the data - Going back to the backup strategy? You can't
+ just hand the customer the backup.
+ You have to dump the data out, and write something that writes it back
+ in, and it has to be fast.
+ 
+\end_layout
+
+\begin_layout Itemize
+Security - you have to let all tenants access the data, security is in the
+ app logic level.
+ 
+\end_layout
+
+\begin_layout Itemize
+Extensibility - in a shared environment it is hard to do a lot of extensibility
+ in the data, because each client is stepping on each other toes.
+ 
+\end_layout
+
+\begin_layout Standard
+As you probably gathered, I strongly suggest going with the separate model.
+ Now our management strategy is dealing with the connection string.
+ Isolation is built in and doesn't require any , for backup you have the
+ vendor tools, and giving the customer its own data is trivial, just send
+ him the backup file.
+ Security is easy, a tenant can access only their DB, and extending this
+ is much easier, because each tenant has their own walled garden to play
+ with.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout LyX-Code
+CREATE TABLE [
+\emph on
+customer_attributes
+\emph default
+] ( 
+\end_layout
+
+\begin_layout LyX-Code
+  [
+\emph on
+id
+\emph default
+] INT NOT NULL, 
+\end_layout
+
+\begin_layout LyX-Code
+  [
+\emph on
+customer_id
+\emph default
+] INT NOT NULL, 
+\end_layout
+
+\begin_layout LyX-Code
+  [
+\emph on
+name
+\emph default
+] NVARCHAR(100) NOT NULL, 
+\end_layout
+
+\begin_layout LyX-Code
+  [
+\emph on
+data_type_id
+\emph default
+] INT NOT NULL 
+\end_layout
+
+\begin_layout LyX-Code
+)
+\end_layout
+
+\begin_layout LyX-Code
+CREATE TABLE [
+\emph on
+customer_attribute_values
+\emph default
+] ( 
+\end_layout
+
+\begin_layout LyX-Code
+  [
+\emph on
+id
+\emph default
+] INT NOT NULL, 
+\end_layout
+
+\begin_layout LyX-Code
+  [
+\emph on
+customer_attribute_id
+\emph default
+] INT NOT NULL, 
+\end_layout
+
+\begin_layout LyX-Code
+  [
+\emph on
+value_int
+\emph default
+] INT NULL, 
+\end_layout
+
+\begin_layout LyX-Code
+  [
+\emph on
+value_nvarchar
+\emph default
+] NVARCHAR(1000) NULL, 
+\end_layout
+
+\begin_layout LyX-Code
+  [
+\emph on
+value_text
+\emph default
+] TEXT NULL, 
+\end_layout
+
+\begin_layout LyX-Code
+  [
+\emph on
+value_float
+\emph default
+] FLOAT NULL 
+\end_layout
+
+\begin_layout LyX-Code
+)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is the most simplistic example of extensibility.
+ Each customer can add new records to the [
+\emph on
+custom_attributes
+\emph default
+] table.
+ Each record in this table indicates the data_type of the record.
+ Then, in the value table, your application uses the [
+\emph on
+data_type_id
+\emph default
+] to determine which column holds the data.
+ (Alternatively, you could serialize all data as strings, which would make
+ the application logic simpler but might have a performance hit.)
+\end_layout
+
+\begin_layout Standard
+You can extend this sort of schema to do almost anything you want.
+ And at no point will you need to spawn new DB objects (sprocs, views, tables)
+ of any kind.
+\end_layout
+
+\begin_layout Standard
+The key is to decouple your actual database schema from what I'll call "the
+ user's perception of your schema".
+ In the above example, you could make the two tables completely transparent
+ to the user.
+ As far as the user is concerned, they are just adding columns to the [
+\emph on
+customer
+\emph default
+] table.
+\end_layout
+
+\begin_layout Subsubsection
+Windows Sharepoint Services db schema : UserData Table
+\end_layout
+
+\begin_layout Standard
+The UserData table stores the data that is displayed in the lists.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="42" columns="3">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Column name
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ Data type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Description
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+tp_ID
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+int
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ID of the data.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+tp_ListId
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+uniqueidentifier
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+GUID of the list with which the data is associated.
+ Found in the Lists table.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+tp_SiteId
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+uniqueidentifier
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+GUID of the SharePoint site to which the data belongs.
+ Found in the Sites table.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+tp_Version
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+int
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Value that indicates the version of the data.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+tp_Author
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+int
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+tp_ID from the UserInfo table of the user who entered the data.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+tp_Editor
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+int
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+tp_ID from the UserInfo table of the user who last modified the data.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+tp_Modified
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+datetime
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Date and time the data was modified.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+tp_Created
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+datetime
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Date and time the data was created.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+tp_Ordering
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+varchar
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Field that specifies the order for threading Web discussion comments.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+tp_HasAttachment
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+bit
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Value that specifies whether the item has an associated attachment.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+tp_ModerationStatus
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+int
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Value that specifies the status of a list if it is moderated.
+ 0 is approved; 2 is pending; 1 is rejected.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+tp_IsCurrent
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+bit
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Value indicating whether the item is the current item in the issue tracking
+ list.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+tp_ItemOrder
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+float
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Sort criterion for an ordered list.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+tp_InstanceID
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+int
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ID for an occurrence in a Meeting Workspace site that has a recurring event
+ or multiple single events linked to it.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+tp_GUID
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+uniqueidentifier
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+GUID value used in full-text search.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+tp_Size
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+int
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Size of the data.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nvarchar1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nvarchar
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Available field for custom information using the Microsoft SQL Server nvarchar
+ data type.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nvarchar2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nvarchar
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Available field for custom information using the Microsoft SQL Server nvarchar
+ data type.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nvarchar64
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nvarchar
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Available field for custom information using the SQL Server nvarchar data
+ type.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+int1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+int
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Available field for custom information using the SQL Server int data type.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+int2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+int
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Available field for custom information using the SQL Server int data type.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+int16
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+int
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Available field for custom information using the SQL Server int data type.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+float1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+float
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Available field for custom information using the SQL Server float data type.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+float2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+float
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Available field for custom information using the SQL Server float data type.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+float32
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+float
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Available field for custom information using the SQL Server float data type.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+datetime1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+datetime
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Available field for custom information using the SQL Server datetime data
+ type.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+datetime16
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+datetime
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Available field for custom information using the SQL Server datetime data
+ type.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+bit1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+bit
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Available field for custom information using the SQL Server bit data type.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+bit16
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+bit
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Available field for custom information using the SQL Server bit data type.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+uniqueidentifier1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+uniqueidentifier
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Available field for custom information using the SQL Server uniqueidentifier
+ data type.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ntext1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ntext
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Available field for custom information using the SQL Server ntext data type.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ntext32
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ntext
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Available field for custom information using the SQL Server ntext data type.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sql_variant1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sql_variant
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Available field for custom information using the SQL Server sql_variant
+ data type.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sql_variant8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sql_variant
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Available field for custom information using the SQL Server sql_variant
+ data type.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Best practices for multi-tenant applications 
+\end_layout
+
+\begin_layout Standard
+On Designing and Deploying Internet-Scale Services is an interesting article
+ in which Hamilton, who was at the time of writing the article doing research
+ on the Windows Live Platform, describes best practices for design and deploy
+ of internet-scale services, such as Hotmail.
+ The recommendations are made with the goal of optimizing the cost of operations
+, but I believe they can improve the quality of your software, including
+ multi-tenant applications, in general.
+\end_layout
+
+\begin_layout Standard
+Hamilton points out three design principles:
+\end_layout
+
+\begin_layout Enumerate
+
+\emph on
+Expect failures
+\emph default
+.
+ Hardware and software will fail, so better be prepared, otherwise your
+ complete system will crash.
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\emph on
+Keep it simple
+\emph default
+.
+ Simple installation and maintenance procedures will result in less mistakes.
+ Also, keep dependencies as simple as possible to make sure that e.g.
+ replacing a server is easy.
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\emph on
+Automate everything
+\emph default
+.
+ Staff is expensive and will make mistakes.
+ An automated process can be tested and is repeatable.
+ 
+\end_layout
+
+\begin_layout Standard
+The rest of the paper is mostly a list of best practices with a short descriptio
+n.
+ I will give a short overview of what I believe to be the most important
+ ones in a multi-tenancy environment.
+ I encourage you all to read the full paper, as it contains excellent recommenda
+tions for developing web applications in general.
+\end_layout
+
+\begin_layout Paragraph
+Application design 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Develop in a complete environment.
+
+\emph default
+ Although unit testing is essential, make sure that your component works
+ in the complete system.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Zero trust underlying components
+\emph default
+.
+ Always validate input as the component it came from may not have done this.
+ Never trust another component does the validation for you: better safe
+ than sorry.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Do not duplicate functionality in different components
+\emph default
+.
+ Code multiplication will result in more difficult maintenance.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Understand access patterns
+\emph default
+.
+ Improve your application by understanding how it is being used; e.g.
+ by improving paths for shorter latency.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Version everything
+\emph default
+.
+ Without versioning it is impossible to keep track of which features have
+ been added or removed.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Avoid single points of failure
+\emph default
+.
+ When a single point of failure stops working, your whole system may fail.
+ Therefore, always use redundancy and replication.
+ 
+\end_layout
+
+\begin_layout Paragraph
+Automatic management 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Be restartable
+\emph default
+.
+ If a service cannot restart when it is in faulted state, the whole system
+ needs to be restarted.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Keep deployment simple
+\emph default
+.
+ The simpler the deployment process, the simpler it is to automate.
+ 
+\end_layout
+
+\begin_layout Paragraph
+Dependency management 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Use stable, proven components
+\emph default
+.
+ Make sure you use components which are reliable.
+ Alpha and beta components may contain many errors, which may cause your
+ system to crash.
+ 
+\end_layout
+
+\begin_layout Paragraph
+Release management 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Allow rollbacks to previous versions.
+
+\emph default
+ Necessary in case of an error in an update.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Monitor and instrument everything, and give enough fault information for
+ diagnosis.
+
+\emph default
+ Save more information than e.g.
+ just 'A query has failed'.
+ Save query, time, error message and if possible the state of the application.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Make everything configurable.
+ 
+\emph default
+Make diagnosis options configurable, rather than adding them when a system
+ is failing.
+ Adding monitoring to a failing system is asking for problems.
+\end_layout
+
+\begin_layout Subsection
+Extensible Data Model 
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+ref.
+ [ayende08-ExtensibleDataModel]
+\end_layout
+
+\begin_layout Standard
+Continuing on the multi tenancy theme.
+ We have the following problem, I now want to focus on the data model, and
+ how you can create an extensible data model.
+\end_layout
+
+\begin_layout Standard
+In particular, I am thinking about the ability to define something like
+ a base line Customer entity, and allow a tenant to extend that with new
+ fields and behavior.
+ Note that we are talking about both data and behavior here, not on just
+ extending the data.
+ But let us try to take a look at that as well, just to see what solutions
+ we can come up with.
+\end_layout
+
+\begin_layout Standard
+The scenario that we have is that the tenant would like to define a new
+ set of properties on the customer, such as non smoking preferences and
+ the mother tongue.
+ Let us see how we can deal with it.
+ We will start by focusing solely on the underlying data model, without
+ considering the actual entities.
+\end_layout
+
+\begin_layout Subsubsection*
+Non RDBMS store
+\end_layout
+
+\begin_layout Standard
+The main problem of storing additional properties in an entity is that we
+ usually map that to an DB, and those really would like to know, upfront,
+ about all the columns and what is the type of each and every column, Going
+ with a non RDBMS store frees us from this limitation, because we can choose
+ a back end store that is can accept any format.
+ A document store like Lucene is a good example, or Google's BigTable or
+ a few others that are out there.
+ This means that you can very easily store tuples in the data store, without
+ requiring fixed schema.
+ Extending teh schema for a customer just means giving them the UI to do
+ so (more on that in a future post).
+\end_layout
+
+\begin_layout Subsubsection*
+The ExtraData Column
+\end_layout
+
+\begin_layout Standard
+Since there are a lot of benefits for a database, we really want to try
+ to deal with hat problem in this context as well.
+ The easiest solution, probably, is having ExternalData XML (or NVARCHAR(MAX)
+ column in all the tables, into which we can tack the specific tenant data.
+ This has the advantage of being very simple to implement, but it has a
+ lot of issues with regards to the resulting data model, being able to query
+ on the data, that the user has added (and is presumedly important.
+ Therefor, we need to consider other options.
+\end_layout
+
+\begin_layout Subsubsection*
+The ExtraInt1, ExtraInt2, ExtraDate1,ExtraDate2, ExrtraStr1, ExtraStr2 Columns
+\end_layout
+
+\begin_layout Standard
+With this approach you define a few extra columns at the end of each entity's
+ table.
+ And allow the user to map his own concepts to those extra columns.
+ This is really nice from the simple perspective of fixed data model, but
+ is a really bad idea from the perspective o understanding what the hell
+ is going on with the system.
+ Because on tenant used ExtraInt1 to store a language Id and another for
+ storing customer weight, trying to understand what this means is extremely
+ hard.
+ Understanding queries, or optimizing them, building meaningful reports,
+ all are going to be very hard to do.
+\end_layout
+
+\begin_layout Subsubsection*
+The Key Value Table
+\end_layout
+
+\begin_layout Standard
+Using this approach, we have an AdditionalValues table, with the following
+ structure (EntityId, ValueTypeId, StrValue, IntValue, DateValue) as well
+ as ValuesDefinitions table (ValueTypeId, EntityType, Name, DataType).
+ Using this, we can "extend" the data model for an entity by simply defining
+ a ValueDefinition and writing the values.
+ It does tend to make things quite a bit more complicated from the querying
+ side, and reporting on top of this mode is hard, to say the least.
+ Beyond that, it is very flexible, and the last solution that keep us with
+ a fixed schema.
+\end_layout
+
+\begin_layout Subsubsection*
+Extending the customer table
+\end_layout
+
+\begin_layout Standard
+By this I mean that if we want an additional value, we can simply add the
+ new column to the table, and we are done.
+ It has some complexity with regards to how you intend to manage that (must
+ allow safe changes only, etc), but from the point of view of usage, that
+ is extremely easy.
+ Querying and reporting are a snap, and the only problem looming in the
+ horizon is the next version.
+\end_layout
+
+\begin_layout Standard
+Let us say that a customer has defined the NaturalLanguage extended column,
+ and marked it as int, with values (2,3,6,8), which are how they represent
+ the values in the rest of the organization.
+ The next version of the product also have NaturalLanguage column, and it
+ is a string with the language code.
+ Problem.
+\end_layout
+
+\begin_layout Subsubsection*
+The Customer_Extended table
+\end_layout
+
+\begin_layout Standard
+We can deal with this issue by separating the customizations into a separate
+ table, which we will give us a good place to put the new columns, with
+ the same benefits of extending the actual table, but without the versioning
+ issues.
+\end_layout
+
+\begin_layout Standard
+For myself, I tend to favor the last one, extended data model using either
+ an extension table or the actual table.
+ It is the easiest to manage & grasp, and it has major benefits for the
+ simplicity of the system on the long term.
+\end_layout
+
+\begin_layout Standard
+So far we have talked only about the actual data model, not how we can extend
+ this with behaviors.
+ I think that I'll leave that one for a later post, and only say tat the
+ storage options that you have will affect your ability to get a clean model
+ at the application layer.
+\end_layout
+
+\begin_layout Subsection
+Customization/Personnalization/Branding
+\end_layout
+
+\begin_layout Paragraph
+Scriptability and DSL
+\end_layout
+
+\begin_layout Standard
+Multi Tenant applications are all about managing variability between the
+ tenants.
+ A sweet spot for a DSL implementation is to manage policy while the application
+ code define the actual operations.
+\end_layout
+
+\begin_layout Standard
+Therefor, it shouldn't come as a surprise that in many instances, where
+ the variability in the application between one tenant and another is entirely
+ (or predominantly) in policy, as it often is, a DSL is a good solution.
+ In particular, defining such things as workflows, attaching behaviors to
+ events in the applications, defining rules, etc.
+ As you can imagine, this is not a single DSL, but a set of languages, each
+ used for a particular task.
+\end_layout
+
+\begin_layout Standard
+I am fond of this approach, for the obvious reasons, but also because it
+ is the easiest way to bring the tenant customization into the tenants hands
+ directly.
+ If you go with that route, you need to be careful about managing the current
+ state (to allow rolling back a changed script) and to ensure that you are
+ isolating the actual application from the client's code, which may very
+ well be written in such a way that would harm the application.
+ As such, it require a bit more investment in the infrastructure than letting
+ developers handle things, but you get a large benefit out of it.
+\end_layout
+
+\begin_layout Subsection
+References
+\end_layout
+
+\begin_layout Itemize
+[ayende08-PhysicalDataModel] http://ayende.com/Blog/archive/2008/08/07/Multi-Tena
+ncy--The-Physical-Data-Model.aspx
+\end_layout
+
+\begin_layout Itemize
+[ayende08-ExtensibleDataModel] http://ayende.com/Blog/archive/2008/08/07/Multi-Te
+nancy--Extensible-Data-Model.aspx
+\end_layout
+
+\begin_layout Itemize
+[JoelOnSoftware discussion] http://discuss.joelonsoftware.com/default.asp?design.4.31
+9460.16
+\end_layout
+
+\begin_layout Itemize
+[Nati Shalom's Blog - Multi-tenancy: does it have to be that hard?] http://natis
+halom.typepad.com/nati_shaloms_blog/2010/03/multitenancy-does-it-have-to-be-that-h
+ard.html
+\end_layout
+
+\end_body
+\end_document
