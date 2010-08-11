@@ -1,4 +1,4 @@
-#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -48,6 +48,27 @@ The Ubiquitous Language
 
 \begin_layout Standard
 Main Domain Objects
+\end_layout
+
+\begin_layout Subsection
+Organisation
+\end_layout
+
+\begin_layout Itemize
+[Name] The display name of the application.
+ This name appears as the root of the repository to all its users.
+ 
+\end_layout
+
+\begin_layout Itemize
+[ID] The unique internal ID of the organization.
+ Users and web services can enter the organization ID when logging to the
+ application.
+ The ID can never be changed once the organization is created.
+\end_layout
+
+\begin_layout Itemize
+[Description] A short description of the organization.
 \end_layout
 
 \begin_layout Subsection
