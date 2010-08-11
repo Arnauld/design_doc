@@ -1,0 +1,116 @@
+#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Section
+Multi-tenancy
+\end_layout
+
+\begin_layout Standard
+As define in Wikipedia “Multitenancy refers to the architectural principle,
+ where a single instance of the software runs on a software-as-a-service
+ (SaaS) vendor's servers, serving multiple client organizations (tenants)”.
+ 
+\end_layout
+
+\begin_layout Standard
+Following are some factors which we have to consider while considering multitena
+ncy as a solution 
+\end_layout
+
+\begin_layout Enumerate
+Cost: Generally multitenancy consider as cost effective solution, it helps
+ to reduce operational cost.
+ But when we consider the cost of redesigning already seated multitenant
+ data architecture, then that cost is high.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Complexity: multitenant data architecture is generally complex architecture.
+ Because of the additional customization complexity and the need to maintain
+ per-tenant metadata, multitenant applications require a larger development
+ effort than applications designed using a more isolated approach
+\end_layout
+
+\begin_layout Standard
+There are three basic approaches based on distinction between shared data
+ and isolated data.
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\emph on
+Separated DB
+\emph default
+: Computing resources and application code are generally shared between
+ all the tenants on a server, but each tenant has its own set of data that
+ remains logically isolated from data that belongs to all other tenants
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\emph on
+Shared Database separate Schema
+\emph default
+: Tenants are in the same database, with each tenant having its own set
+ of tables that are grouped into a schema created specifically for the tenant
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\emph on
+Shared Database shared Schema
+\emph default
+: A third approach involves using the same database and the same set of
+ tables to host multiple tenants' data.
+ A given table can include records from multiple tenants stored in any order
+ and there is one identifier is maintained which distinguishes records for
+ each tenant.
+ 
+\end_layout
+
+\end_body
+\end_document
